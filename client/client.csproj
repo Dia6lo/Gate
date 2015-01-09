@@ -19,20 +19,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="dungeon.png" />
     <Content Include="index.html" />
-    <Content Include="Scripts\pixi-1.4.1.js" />
-    <Content Include="Scripts\pixi-1.4.1.min.js" />
+    <Content Include="leftwall.png" />
+    <Content Include="lib\pixi.dev.js" />
+    <Content Include="lib\require.js" />
+    <Content Include="rightwall.png" />
+    <Content Include="wall.png" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="Scripts\typings\pixi\pixi.d.ts" />
+    <TypeScriptCompile Include="lib\typings\pixi.d.ts" />
+    <TypeScriptCompile Include="lib\typings\require.d.ts" />
+    <TypeScriptCompile Include="src\game.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
-    <Content Include="Scripts\pixi-1.4.1.min.js.map">
-      <DependentUpon>pixi-1.4.1.min.js</DependentUpon>
-    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -40,7 +42,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="assets\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
@@ -70,6 +74,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>commonjs</TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
