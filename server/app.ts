@@ -11,8 +11,10 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log('user disconnected');
     });
-    socket.on("move", function () {
-        console.log('LOL');
+    socket.on("move", function (data) {
+        console.log(data);
+        game.newPosition(data);
+        io.emit('map', JSON.stringify(game.map));
     });
 });
 
