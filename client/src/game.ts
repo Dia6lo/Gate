@@ -14,7 +14,7 @@
             this.settings = {
                 tilesX: 20, //The number of horizontal tiles on this map
                 tilesY: 10, //The number of vertical tiles on this map
-                zoom: 2 //The scale of the map
+                zoom: 3 //The scale of the map
             }
             this.load();
         }
