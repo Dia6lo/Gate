@@ -50,13 +50,17 @@
 
             }
             var startingTile = this.map.tiles[this.player.position.x][this.player.position.y];
-            startingTile.removeEntity(this.player);
+            var finishTile = this.map.tiles[this.player.position.x + movement.x][this.player.position.y + movement.y];
+            //console.log(finishTile.blocking);
+            if (!finishTile.blocking) {
+                startingTile.removeEntity(this.player);
 
-            this.player.position.x += movement.x;
-            this.player.position.y += movement.y;
+                this.player.position.x += movement.x;
+                this.player.position.y += movement.y;
 
-            var finishTile = this.map.tiles[this.player.position.x][this.player.position.y];
-            finishTile.addEntity(this.player);
+                var finishTile = this.map.tiles[this.player.position.x][this.player.position.y];
+                finishTile.addEntity(this.player);
+            }
         }
     }
 
@@ -97,17 +101,20 @@
 
                 //Loop through every vertical row
                 for (var y = 0; y < this.settings.tilesY; y++) {
-                    blocking = true;
-                    if ((y == 0) || (y == this.settings.tilesY - 1))
+                    blocking = false;
+                    tile = "dungeon.png";
+                    if ((y == 0) || (y == this.settings.tilesY - 1)) {
                         tile = "wall.png"
-                    else {
-                        tile = "dungeon.png";
-                        blocking = false
+                        blocking = true;
                     }
-                    if (x == 0)
+                    if (x == 0) {
                         tile = "leftwall.png"
-                    if (x == this.settings.tilesX - 1)
+                        blocking = true;
+                    }
+                    if (x == this.settings.tilesX - 1) {
                         tile = "rightwall.png"
+                        blocking = true;
+                    }
                     //Initialize this position by setting it to zero, and blocking light
                     this.tiles[x][y] = new Tile(tile, blocking);
 

@@ -12,7 +12,7 @@ io.on('connection', function (socket) {
         console.log('user disconnected');
     });
     socket.on("move", function (data) {
-        console.log(data);
+        //console.log(data);
         game.newPosition(data);
         io.emit('map', JSON.stringify(game.map));
     });

@@ -51,6 +51,7 @@ module Game {
             };
             this.player = new Entity(this, "Player", "warrior.png", 3, 3, playerControls);
             this.map.entities.addEntity(this.player);
+            this.update();
             this.initializeClient();
             //this.update();
             //this.renderer.render(this.stage);
