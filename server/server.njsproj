@@ -36,14 +36,17 @@
     <TypeScriptCompile Include="app.ts" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <TypeScriptCompile Include="Scripts\typings\express\express.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
+    <TypeScriptCompile Include="src\game.ts" />
+    <TypeScriptCompile Include="typings\node\node.d.ts" />
+    <TypeScriptCompile Include="typings\socket.io\socket.io.d.ts" />
+    <TypeScriptCompile Include="typings\ws\ws.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Scripts\" />
-    <Folder Include="Scripts\typings\" />
-    <Folder Include="Scripts\typings\express\" />
-    <Folder Include="Scripts\typings\node\" />
+    <Folder Include="src\" />
+    <Folder Include="typings\" />
+    <Folder Include="typings\socket.io\" />
+    <Folder Include="typings\ws\" />
+    <Folder Include="typings\node\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

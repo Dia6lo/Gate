@@ -24,14 +24,17 @@
     <Content Include="leftwall.png" />
     <Content Include="lib\pixi.dev.js" />
     <Content Include="lib\require.js" />
+    <Content Include="lib\socket.io.js" />
     <Content Include="rightwall.png" />
     <Content Include="wall.png" />
+    <Content Include="warrior.png" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="lib\typings\pixi.d.ts" />
     <TypeScriptCompile Include="lib\typings\require.d.ts" />
+    <TypeScriptCompile Include="lib\typings\socket.io.d.ts" />
     <TypeScriptCompile Include="src\game.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +60,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>58539</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

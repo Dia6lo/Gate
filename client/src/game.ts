@@ -1,4 +1,5 @@
-﻿module Game {
+﻿//// <reference path="../lib/typings/socket.io.d.ts" />
+module Game {
     export class Game {
 
         width: number;
@@ -10,6 +11,7 @@
         world: World;
         player: Entity;
         keyboard: Keyboard;
+        client: Client;
         constructor() {
             this.settings = {
                 tilesX: 20, //The number of horizontal tiles on this map
@@ -40,13 +42,14 @@
             this.world = new World(this);
             this.keyboard = new Keyboard();
             this.initializeMap();
-            this.initializePlayer();
-            this.update();
+            //this.initializePlayer();
+            this.initializeClient();
+            //this.update();
             //this.renderer.render(this.stage);
         }
 
         update() {
-            requestAnimationFrame(this.update.bind(this));
+            //requestAnimationFrame(this.update.bind(this));
             this.renderer.render(this.stage);
         }
 
@@ -70,6 +73,55 @@
             var startingTile = this.map.tiles[3][3];
             startingTile.addEntity(this.player);
         }
+
+        initializeClient() {
+            this.client = new Client(this);
+        }
+    }
+    class Client {
+        game: Game;
+        socket: Socket;
+        connected: boolean;
+        constructor(game: Game) {
+            this.game = game;
+            this.socket = io.connect("127.0.0.1:8080");
+            this.socket.on('connect', function () {
+                this.connected = true;
+            });
+            this.socket.on('map', function (data) {
+                this.connected = true;
+                var msg = JSON.parse(data);
+                game.map.update(msg);
+                game.update();
+            });
+            this.socket.on('disconnect', function () {
+
+            });
+        }
+        /*openConnection() {
+            var socket = io('http://localhost');
+            socket.on('connect', function () { });
+            socket.on('event', function (data) { });
+            socket.on('disconnect', function () { });
+
+            this.ws = new WebSocket("127.0.0.1:8080");
+            this.connected = false;
+            this.ws.onmessage = this.onMessage.bind(this);
+            //this.ws.onerror = this.displayError.bind(this);
+            this.ws.onopen = this.connectionOpen.bind(this);
+        }
+        connectionOpen() {
+            this.connected = true;
+            //myText.text = 'connected\n';
+            //this.client.ws.send("Init");
+        }
+        onMessage(message) {
+            //myText.text = myText.text + message.data;
+            
+            var msg = JSON.parse(message.data);
+            this.game.map.update(msg);
+            this.game.update();
+        }*/
     }
 
     class Entity {
@@ -90,7 +142,6 @@
     class World extends PIXI.DisplayObjectContainer {
 
         game: Game;
-        camera: Camera;
         scale: PIXI.Point;
 
         constructor(game: Game) {
@@ -100,19 +151,11 @@
         }
 
         initialize() {
-            this.camera = new Camera();//(this.game, new Vector2(0, 0));
-
             //Scale the entire world
             this.scale = new PIXI.Point(this.game.settings.zoom, this.game.settings.zoom);
 
             //Add the container object to the stage
             this.game.stage.addChild(this);
-        }
-    }
-
-    class Camera {
-        constructor() {
-
         }
     }
 
@@ -130,10 +173,6 @@
             this.tiles = [];
             this.pixitiles = [];
             this.entities = new Group(game);
-            this.initialize();
-        }
-
-        initialize() {
             //TODO: Make this dynamic on the depth of the dungeon, this will allow the generator to make more complicated maps the deeper you go
             //Define settings
             this.settings = {
@@ -141,49 +180,64 @@
                 tilesY: 10, //The number of vertical tiles on this map
                 tileSize: 16, //The width and height of a single tile
             };
-            var tile: string;
-            //Loop through every horizontal row
+            this.game.world.addChild(this);
+            //this.initialize();
+        }
+
+        update(map) {
+            if (map != undefined)
             for (var x = 0; x < this.settings.tilesX; x++) {
 
-                //Initialize this row
-                this.tiles[x] = [];
-                this.pixitiles[x] = [];
+                    //Initialize this row
+                    this.tiles[x] = [];
+                    this.pixitiles[x] = [];
 
-                //Loop through every vertical row
-                for (var y = 0; y < this.settings.tilesY; y++) {
-                    if ((y == 0) || (y == this.settings.tilesY - 1))
-                        tile = "wall.png"
-                    else
-                        tile = "dungeon.png"
-                    if (x == 0)
-                        tile = "leftwall.png"
-                    if (x == this.settings.tilesX - 1)
-                        tile = "rightwall.png"
-                    //Initialize this position by setting it to zero, and blocking light
-                    this.tiles[x][y] = new Tile(0, true, 0);
+                    //Loop through every vertical row
+                    for (var y = 0; y < this.settings.tilesY; y++) {
+                        this.pixitiles[x][y] = PIXI.Sprite.fromImage(map.tiles[x][y].texture);
 
-                    this.pixitiles[x][y] = PIXI.Sprite.fromImage(tile);
+                        this.pixitiles[x][y].position.x = x * this.settings.tileSize;
+                        this.pixitiles[x][y].position.y = y * this.settings.tileSize;
 
-                    this.pixitiles[x][y].position.x = x * this.settings.tileSize;
-                    this.pixitiles[x][y].position.y = y * this.settings.tileSize;
+                        //Add the tile to the container
+                        this.addChild(this.pixitiles[x][y]);
+                        //Initialize this position by setting it to zero, and blocking light
+                        this.tiles[x][y] = new Tile(0, map.tiles[x][y].entities);
 
-                    //Add the tile to the container
-                    this.addChild(this.pixitiles[x][y]);
-
-                }
+                        map.tiles[x][y].entities.forEach(entity=> {
+                            var playerControls = {
+                                "left": 65,
+                                "right": 68,
+                                "up": 87,
+                                "down": 83,
+                            };
+                            this.game.player = new Entity(this.game, "Player", "warrior.png", 3, 3, playerControls);
+                            this.entities.addEntity(this.game.player);
+                            var startingTile = this.tiles[3][3];
+                            startingTile.addEntity(this.game.player);
+                            /*var playerControls = {
+                                "left": 65,
+                                "right": 68,
+                                "up": 87,
+                                "down": 83,
+                            };
+                            var ent = new Entity(this.game, entity.type, entity.sprite, entity.position.x, entity.position.y, playerControls)
+                            this.entities.addEntity(ent);
+                            this.tiles[x][y].addEntity(ent);*/
+                        });
+                    }
 
             }
-
-            //Add the container object to the stage
-            this.game.world.addChild(this);
+            
+            //this.game.world.addChild(this);
         }
     }
 
     class Tile {
         entities: Array<Entity>;
 
-        constructor(type: number, blockLight: boolean, room: number) {
-            this.entities = [];
+        constructor(type: number, entities: Array<Entity>) {
+            this.entities = entities;
         }
         addEntity(entity) {
             this.entities.push(entity);
@@ -320,48 +374,7 @@
 
         }
         newPosition(direction) {
-
-            //Define variables
-            var movement = { x: 0, y: 0 };
-
-            //Check which controls are being pressed and update the player accordingly
-            switch (direction) {
-
-                case ("left"):
-
-                    movement.x = -1
-
-                    break;
-
-                case ("up"):
-
-                    movement.y = -1
-
-                    break;
-
-                case ("right"):
-
-                    movement.x = 1
-
-                    break;
-
-                case ("down"):
-
-                    movement.y = 1
-
-                    break;
-
-            }
-            this.game.map.entities.removeEntity(this.entity);
-            var startingTile = this.game.map.tiles[this.entity.position.x][this.entity.position.y];
-            startingTile.removeEntity(this.entity);
-
-            this.entity.position.x += movement.x;
-            this.entity.position.y += movement.y;
-
-            this.game.map.entities.addEntity(this.entity);
-            var finishTile = this.game.map.tiles[this.entity.position.x][this.entity.position.y];
-            startingTile.addEntity(this.entity);
+            this.game.client.socket.emit("move", direction);//ws.send(direction);
         }
     }
 
