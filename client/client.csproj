@@ -19,22 +19,32 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
-    <Content Include="dungeon.png" />
+    <Content Include="assets\dungeon.png" />
     <Content Include="index.html" />
-    <Content Include="leftwall.png" />
+    <Content Include="assets\leftwall.png" />
     <Content Include="lib\pixi.dev.js" />
     <Content Include="lib\require.js" />
     <Content Include="lib\socket.io.js" />
-    <Content Include="rightwall.png" />
-    <Content Include="wall.png" />
-    <Content Include="warrior.png" />
+    <Content Include="assets\rightwall.png" />
+    <Content Include="assets\wall.png" />
+    <Content Include="assets\warrior.png" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="lib\typings\pixi.d.ts" />
-    <TypeScriptCompile Include="lib\typings\require.d.ts" />
-    <TypeScriptCompile Include="lib\typings\socket.io.d.ts" />
+    <TypeScriptCompile Include="src\client.ts" />
+    <TypeScriptCompile Include="src\entity.ts" />
+    <TypeScriptCompile Include="src\event.ts" />
+    <TypeScriptCompile Include="src\group.ts" />
+    <TypeScriptCompile Include="src\key.ts" />
+    <TypeScriptCompile Include="src\keyboard.ts" />
+    <TypeScriptCompile Include="src\keyboardcontrol.ts" />
+    <TypeScriptCompile Include="src\map.ts" />
+    <TypeScriptCompile Include="src\tile.ts" />
+    <TypeScriptCompile Include="src\world.ts" />
+    <TypeScriptCompile Include="typings\pixi.d.ts" />
+    <TypeScriptCompile Include="typings\require.d.ts" />
+    <TypeScriptCompile Include="typings\socket.io.d.ts" />
     <TypeScriptCompile Include="src\game.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -45,9 +55,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="assets\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
@@ -77,7 +85,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptModuleKind>commonjs</TypeScriptModuleKind>
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>

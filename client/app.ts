@@ -1,12 +1,13 @@
-﻿/// <reference path="src/game.ts" />
+﻿/// <reference path="typings/require.d.ts" />
+
+import Game = require("src/game");
 
 var Intialize = function initializeCanvas() {
     
     //Create a new game
-    var game = new Game.Game();
-
+    var game = new Game();
 };
 
-window.onload = () => {
+require([], () => {
     Intialize();
-};
+});
