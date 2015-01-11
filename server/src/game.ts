@@ -18,8 +18,8 @@ class Game {
         var x = Math.floor(Math.random() * 19);
         var y = Math.floor(Math.random() * 9);
         while (this.map.tiles[x][y].entities[0] != undefined) {
-            var x = Math.floor(Math.random() * 19);
-            var y = Math.floor(Math.random() * 9);
+            var x = Math.floor((Math.random() * 18) + 1) ;
+            var y = Math.floor((Math.random() * 8) + 1);
         }
         var player = new Entity(id, "warrior.png", x, y);
         this.players.push(player);
