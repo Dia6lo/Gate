@@ -16,7 +16,10 @@ io.on('connection', function (socket) {
     });
     socket.on("move", function (data) {
         game.newPosition(data);
-        io.emit('map', JSON.stringify(game.map));
+        if (game.isUpdated) {
+            io.emit('map_update', JSON.stringify(game.update));
+            game.isUpdated = false;
+        }
     });
 });
 

@@ -4,8 +4,12 @@ import Entity = require("./entity");
 class Game {
     map: Map;
     player: Entity;
+    update;
+    isUpdated: boolean;
     constructor() {
         this.initialize();
+        this.isUpdated = false;
+        this.update = {};
     }
 
     initialize() {
@@ -53,6 +57,7 @@ class Game {
         }
         var startingTile = this.map.tiles[this.player.position.x][this.player.position.y];
         var finishTile = this.map.tiles[this.player.position.x + movement.x][this.player.position.y + movement.y];
+        this.update.from = this.player.position;
         //console.log(finishTile.blocking);
         if (!finishTile.blocking) {
             startingTile.removeEntity(this.player);
@@ -62,7 +67,9 @@ class Game {
 
             var finishTile = this.map.tiles[this.player.position.x][this.player.position.y];
             finishTile.addEntity(this.player);
+            this.isUpdated = true;
         }
+        this.update.to = this.player.position;
     }
 }
 

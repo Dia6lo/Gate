@@ -12,7 +12,7 @@
     initialize() {
         //Scale the entire world
         this.scale = new PIXI.Point(this.game.settings.zoom, this.game.settings.zoom);
-
+        
         //Add the container object to the stage
         this.game.stage.addChild(this);
     }

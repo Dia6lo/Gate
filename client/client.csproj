@@ -28,6 +28,7 @@
     <Content Include="assets\rightwall.png" />
     <Content Include="assets\wall.png" />
     <Content Include="assets\warrior.png" />
+    <Content Include="lib\stats.min.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

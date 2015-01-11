@@ -49,16 +49,9 @@ class Game {
         this.keyboard = new Keyboard();
         this.initializeMap();
         //this.initializePlayer();
-        var playerControls = {
-            "left": 65,
-            "right": 68,
-            "up": 87,
-            "down": 83,
-        };
-        this.player = new Entity(this, "Player", "warrior.png", 3, 3, playerControls);
-        this.map.entities.addEntity(this.player);
         this.update();
         this.initializeClient();
+        //this.isInitialized = true;
         //this.update();
         //this.renderer.render(this.stage);
     }

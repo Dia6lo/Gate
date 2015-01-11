@@ -9,7 +9,11 @@
             this.connected = true;
         });
         this.socket.on('map', function (data) {
-            this.connected = true;
+            var msg = JSON.parse(data);
+            game.map.create(msg);
+            game.update();
+        });
+        this.socket.on('map_update', function (data) {
             var msg = JSON.parse(data);
             game.map.update(msg);
             game.update();

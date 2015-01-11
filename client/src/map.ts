@@ -1,5 +1,6 @@
 ﻿import Tile = require("./tile");
 import Group = require("./group");
+import Entity = require("./entity");
 
 class Map extends PIXI.SpriteBatch {
 
@@ -47,8 +48,9 @@ class Map extends PIXI.SpriteBatch {
         }
         this.game.world.addChild(this);
     }
-    update(map) {
+    create(map) {
         if (map != undefined)
+            this.removeChildren();
             for (var x = 0; x < this.settings.tilesX; x++) {
 
                 //Loop through every vertical row
@@ -59,20 +61,33 @@ class Map extends PIXI.SpriteBatch {
                     this.pixitiles[x][y].position.y = y * this.settings.tileSize;
                     this.addChild(this.pixitiles[x][y]);
                     map.tiles[x][y].entities.forEach(entity=> {
-
+                        var playerControls = {
+                            "left": 65,
+                            "right": 68,
+                            "up": 87,
+                            "down": 83,
+                        };
+                        this.game.player = new Entity(this.game, "Player", "warrior.png", x, y, playerControls);
+                        this.entities.addEntity(this.game.player);
+                        
                         //this.game.player = new Entity(this.game, "Player", "warrior.png", 3, 3, playerControls);
                         //this.entities.addEntity(this.game.player);
                         //var startingTile = this.tiles[this.game.player.position.x][this.game.player.position.y];
-                        this.entities.removeEntity(this.game.player);
-                        this.game.player.position = { x: x, y: y };
+                        //this.entities.removeEntity(this.game.player);
+                        //this.game.player.position = { x: x, y: y };
                         //var finishTile = this.tiles[x][y];
-                        this.entities.addEntity(this.game.player);
+                        //this.entities.addEntity(this.game.player);
                     });
                 }
 
             }
-
-        //this.game.world.addChild(this);
+    }
+    update(update) {
+        var from = update.from;
+        var to = update.to;
+        this.entities.removeEntity(this.game.player);
+        this.game.player.position = { x: update.to.x, y: update.to.y };
+        this.entities.addEntity(this.game.player);
     }
 }
 
