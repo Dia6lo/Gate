@@ -1,4 +1,7 @@
-﻿import Game = require('./src/game');
+﻿/// <reference path="typings/node/node.d.ts" />
+/// <reference path="typings/socket.io/socket.io.d.ts" />
+
+import Game = require('./src/game');
 
 var game = new Game();
 
