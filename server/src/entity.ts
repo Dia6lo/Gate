@@ -1,10 +1,10 @@
 ﻿class Entity {
-    type: string;
+    id: number;
     sprite: string;
     position;
-    constructor(type: string, sprite: string, x: number, y: number) {
+    constructor(id: number, sprite: string, x: number, y: number) {
         this.position = { x: x, y: y };
-        this.type = type;
+        this.id = id;
         this.sprite = sprite;
     }
 }

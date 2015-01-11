@@ -6,11 +6,37 @@
     <title>Gate</title>
     <link rel="stylesheet" href="app.css" type="text/css" />
     <script src="lib/pixi.dev.js"></script>
+    <script src="lib/stats.min.js"></script>
     <script src="lib/socket.io.js"></script>
 </head>
 <body>
     <script src="lib/require.js"
             data-main="app"
             type="text/javascript"></script>
+    <script>
+        var stats = new Stats();
+        stats.setMode(1); // 0: fps, 1: ms
+
+        // align top-left
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.right = '10px';
+        stats.domElement.style.top = '10px';
+
+        document.body.appendChild(stats.domElement);
+
+        var update = function () {
+
+            stats.begin();
+
+            // monitored code goes here
+
+            stats.end();
+
+            requestAnimationFrame(update);
+
+        };
+
+        requestAnimationFrame(update);
+        </script>
     </body>
 </html>

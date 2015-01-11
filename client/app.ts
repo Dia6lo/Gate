@@ -1,4 +1,6 @@
-﻿/// <reference path="typings/require.d.ts" />
+﻿/// <reference path="typings/pixi.d.ts" />
+/// <reference path="typings/socket.io.d.ts" />
+/// <reference path="typings/require.d.ts" />
 
 import Game = require("src/game");
 
