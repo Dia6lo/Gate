@@ -1,2 +1,4 @@
 C:\Reps\Gate\TryGate\3\Gate\server\bin\Microsoft.NodejsTools.WebRole.dll
 C:\Reps\Gate\TryGate\3\Gate\server\obj\Debug\server.njsprojResolveAssemblyReference.cache
+C:\Reps\Gate\TryGate\Gate\server\obj\Debug\server.njsprojResolveAssemblyReference.cache
+C:\Reps\Gate\TryGate\Gate\server\bin\Microsoft.NodejsTools.WebRole.dll
