@@ -20,6 +20,7 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="assets\dungeon.png" />
+    <Content Include="assets\skeleton.png" />
     <Content Include="index.html" />
     <Content Include="assets\leftwall.png" />
     <Content Include="lib\pixi.dev.js" />

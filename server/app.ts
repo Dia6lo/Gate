@@ -23,9 +23,9 @@ io.on('connection', function (socket) {
     });
 
     socket.on("move", function (data) {
-        console.log(JSON.stringify(game.players));
+        //console.log(JSON.stringify(game.players));
         game.newPosition(playerId, data);
-        console.log(JSON.stringify(game.update));
+        //console.log(JSON.stringify(game.update));
         if (game.isUpdated) {
             io.emit('map_update', JSON.stringify(game.update));
             game.isUpdated = false;
