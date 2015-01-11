@@ -3,27 +3,61 @@ import Entity = require("./entity");
 
 class Game {
     map: Map;
-    player: Entity;
     update;
     isUpdated: boolean;
+    players: Array<Entity>;
     constructor() {
-        this.initialize();
+        this.map = new Map();
         this.isUpdated = false;
         this.update = {};
+        this.players = [];
     }
 
-    initialize() {
-        this.map = new Map();
-        this.initializePlayer();
+    initializePlayer(id: number) {
+        this.update = {};
+        var x = Math.floor(Math.random() * 19);
+        var y = Math.floor(Math.random() * 9);
+        while (this.map.tiles[x][y].entities[0] != undefined) {
+            var x = Math.floor(Math.random() * 19);
+            var y = Math.floor(Math.random() * 9);
+        }
+        var player = new Entity(id, "warrior.png", x, y);
+        this.players.push(player);
+        var startingTile = this.map.tiles[x][y];
+        startingTile.addEntity(player);
+        this.update = { x: player.position.x,y: player.position.y}
     }
 
-    initializePlayer() {
-        this.player = new Entity("Player", "warrior.png", 3, 3);
-        var startingTile = this.map.tiles[3][3];
-        startingTile.addEntity(this.player);
+    getPlayer(id: number) {
+        for (var i = 0; i < this.players.length; i++) {
+            var player = this.players[i];
+            if (player.id == id)
+                return player;
+        }
+        return null;
     }
-    newPosition(direction) {
 
+    destroyPlayer(id: number) {
+        this.update = {};
+        var player = this.getPlayer(id);
+        //Check if the entity exists, if not, we don't have to delete it
+        var index = this.players.indexOf(player);
+
+        //The element doesn't exist in the list
+        if (index === -1) {
+
+            return;
+
+        }
+        this.update = { x: player.position.x, y: player.position.y }
+        //Remove the current entity from the group
+        this.players.splice(index, 1);
+        this.map.tiles[player.position.x][player.position.y].removeEntity(player);
+    }
+
+    newPosition(id, direction) {
+        this.update = {};
+        var player = this.getPlayer(id);
         //Define variables
         var movement = { x: 0, y: 0 };
 
@@ -55,21 +89,20 @@ class Game {
                 break;
 
         }
-        var startingTile = this.map.tiles[this.player.position.x][this.player.position.y];
-        var finishTile = this.map.tiles[this.player.position.x + movement.x][this.player.position.y + movement.y];
-        this.update.from = this.player.position;
+        var startingTile = this.map.tiles[player.position.x][player.position.y];
+        var finishTile = this.map.tiles[player.position.x + movement.x][player.position.y + movement.y];
+        this.update.from = { x: player.position.x, y: player.position.y };
         //console.log(finishTile.blocking);
-        if (!finishTile.blocking) {
-            startingTile.removeEntity(this.player);
+        if ((!finishTile.blocking)&&(finishTile.entities[0] == undefined)) {
+            startingTile.removeEntity(player);
 
-            this.player.position.x += movement.x;
-            this.player.position.y += movement.y;
+            player.position.x += movement.x;
+            player.position.y += movement.y;
 
-            var finishTile = this.map.tiles[this.player.position.x][this.player.position.y];
-            finishTile.addEntity(this.player);
+            finishTile.addEntity(player);
             this.isUpdated = true;
         }
-        this.update.to = this.player.position;
+        this.update.to = {x: player.position.x, y: player.position.y};
     }
 }
 

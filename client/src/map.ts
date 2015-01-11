@@ -1,6 +1,15 @@
 ﻿import Tile = require("./tile");
 import Group = require("./group");
 import Entity = require("./entity");
+import KeyboardControl = require("./keyboardcontrol");
+
+class Player extends Entity {
+    keyboard: KeyboardControl;
+    constructor(game, type: string, sprite: string, x: number, y: number, controls) {
+        super(game, type, sprite, x, y);
+        this.keyboard = new KeyboardControl(game, this, controls);
+    }
+}
 
 class Map extends PIXI.SpriteBatch {
 
@@ -9,9 +18,10 @@ class Map extends PIXI.SpriteBatch {
     tiles: Array<Array<Tile>>;
     pixitiles: Array<Array<PIXI.Sprite>>;
     entities: Group;
-
+    init: boolean;
     constructor(game) {
         super();
+        this.init = false;
         this.game = game;
         this.tiles = [];
         this.pixitiles = [];
@@ -61,33 +71,48 @@ class Map extends PIXI.SpriteBatch {
                     this.pixitiles[x][y].position.y = y * this.settings.tileSize;
                     this.addChild(this.pixitiles[x][y]);
                     map.tiles[x][y].entities.forEach(entity=> {
-                        var playerControls = {
-                            "left": 65,
-                            "right": 68,
-                            "up": 87,
-                            "down": 83,
-                        };
-                        this.game.player = new Entity(this.game, "Player", "warrior.png", x, y, playerControls);
-                        this.entities.addEntity(this.game.player);
-                        
-                        //this.game.player = new Entity(this.game, "Player", "warrior.png", 3, 3, playerControls);
-                        //this.entities.addEntity(this.game.player);
-                        //var startingTile = this.tiles[this.game.player.position.x][this.game.player.position.y];
-                        //this.entities.removeEntity(this.game.player);
-                        //this.game.player.position = { x: x, y: y };
-                        //var finishTile = this.tiles[x][y];
-                        //this.entities.addEntity(this.game.player);
+                        var poop = new Entity(this.game, "Poop", "skeleton.png", x, y);
+                        this.entities.addEntity(poop);
+                        this.tiles[x][y].entities[0] = poop;
                     });
                 }
 
             }
     }
-    update(update) {
-        var from = update.from;
-        var to = update.to;
-        this.entities.removeEntity(this.game.player);
-        this.game.player.position = { x: update.to.x, y: update.to.y };
-        this.entities.addEntity(this.game.player);
+
+    addPlayer(position) {
+        if (!this.init) {
+            var playerControls = {
+                "left": 65,
+                "right": 68,
+                "up": 87,
+                "down": 83,
+            };
+            this.game.player = new Player(this.game, "Player", "warrior.png", position.x, position.y, playerControls);
+            this.entities.addEntity(this.game.player);
+            this.tiles[position.x][position.y].entities[0] = this.game.player;
+            this.init = true;
+        }
+        else {
+            var poop = new Entity(this.game, "Poop", "skeleton.png", position.x, position.y);
+            this.tiles[position.x][position.y].entities[0] = poop;
+            this.entities.addEntity(poop);
+        }
+    }
+
+    removePlayer(position) {
+        var ent = this.tiles[position.x][position.y].entities[0];
+        this.entities.removeEntity(ent);
+    }
+
+    update(position) {
+        var from = position.from;
+        var to = position.to;
+        var ent = this.tiles[from.x][from.y].entities[0];
+        this.entities.removeEntity(ent);
+        ent.position = { x: to.x, y: to.y };
+        this.entities.addEntity(ent);
+        this.tiles[to.x][to.y].entities[0] = ent;
     }
 }
 

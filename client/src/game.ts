@@ -69,19 +69,6 @@ class Game {
         this.world.addChild(this.map.entities);
     }
 
-    initializePlayer() {
-        var playerControls = {
-            "left": 65,
-            "right": 68,
-            "up": 87,
-            "down": 83,
-        };
-        this.player = new Entity(this, "Player", "warrior.png", 3, 3, playerControls);
-        this.map.entities.addEntity(this.player);
-        var startingTile = this.map.tiles[3][3];
-        startingTile.addEntity(this.player);
-    }
-
     initializeClient() {
         this.client = new Client(this);
     }
