@@ -2,11 +2,13 @@
 
 class Tile {
     entities: Array<Entity>;
+    player: Entity;
     texture: string;
     blocking: boolean;
 
     constructor(texture: string, blocking: boolean) {
         this.entities = [];
+        this.player = null;
         this.texture = texture;
         this.blocking = blocking;
     }

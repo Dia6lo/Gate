@@ -36,15 +36,23 @@
     <TypeScriptCompile Include="app.ts" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <TypeScriptCompile Include="src\components\interface.ts" />
+    <TypeScriptCompile Include="src\components\movement.ts" />
+    <TypeScriptCompile Include="src\components\position.ts" />
     <TypeScriptCompile Include="src\game.ts" />
     <TypeScriptCompile Include="src\entity.ts" />
     <TypeScriptCompile Include="src\map.ts" />
+    <TypeScriptCompile Include="src\systems.ts" />
+    <TypeScriptCompile Include="src\systems\movement.ts" />
     <TypeScriptCompile Include="src\tile.ts" />
+    <TypeScriptCompile Include="typings\game.d.ts" />
     <TypeScriptCompile Include="typings\node\node.d.ts" />
     <TypeScriptCompile Include="typings\socket.io\socket.io.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
+    <Folder Include="src\components\" />
+    <Folder Include="src\systems\" />
     <Folder Include="typings\" />
     <Folder Include="typings\socket.io\" />
     <Folder Include="typings\node\" />

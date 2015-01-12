@@ -1,5 +1,6 @@
 ﻿/// <reference path="typings/node/node.d.ts" />
 /// <reference path="typings/socket.io/socket.io.d.ts" />
+/// <reference path="typings/game.d.ts" />
 
 import Game = require('./src/game');
 
@@ -24,7 +25,7 @@ io.on('connection', function (socket) {
 
     socket.on("move", function (data) {
         //console.log(JSON.stringify(game.players));
-        game.newPosition(playerId, data);
+        game.playerMove(playerId, data);
         //console.log(JSON.stringify(game.update));
         if (game.isUpdated) {
             io.emit('map_update', JSON.stringify(game.update));
