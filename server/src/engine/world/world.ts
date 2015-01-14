@@ -1,21 +1,21 @@
 ﻿import Tile = require("./tile");
 
-class Map {
+class World implements World {
 
     settings;
     tiles: Array<Array<Tile>>;
 
     constructor() {
-
         this.tiles = [];
-        this.initialize();
-    }
-
-    initialize() {
         this.settings = {
             tilesX: 20, //The number of horizontal tiles on this map
             tilesY: 10, //The number of vertical tiles on this map
         };
+        this.initialize();
+    }
+
+    initialize() {
+        
         var tile: string;
         var blocking: boolean;
         //Loop through every horizontal row
@@ -50,4 +50,4 @@ class Map {
 
 }
 
-export = Map;
+export = World;

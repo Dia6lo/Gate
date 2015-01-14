@@ -4,7 +4,7 @@ import Movement = require("./systems/movement");
 class Systems {
     movement: Movement;
     constructor(game: Game) {
-        this.movement = new Movement(game.map);
+        this.movement = new Movement(game.world);
     }
 }
 

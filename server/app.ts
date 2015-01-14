@@ -1,6 +1,6 @@
 ﻿/// <reference path="typings/node/node.d.ts" />
 /// <reference path="typings/socket.io/socket.io.d.ts" />
-/// <reference path="typings/game.d.ts" />
+/// <reference path="src/engine/typings/app.d.ts" />
 
 import Game = require('./src/game');
 
@@ -14,7 +14,7 @@ io.on('connection', function (socket) {
     count++;
     var playerId: number = count;
     console.log("connected player " + playerId.toString());
-    socket.emit('map', JSON.stringify(game.map));
+    socket.emit('map', JSON.stringify(game.world));
     game.initializePlayer(playerId);
     io.emit('new_player', JSON.stringify(game.update));
     socket.on('disconnect', function () {

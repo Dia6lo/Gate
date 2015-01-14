@@ -1,4 +1,4 @@
-﻿import Entity = require("./entity");
+﻿import Entity = require("../entity");
 
 class Tile {
     entities: Array<Entity>;
