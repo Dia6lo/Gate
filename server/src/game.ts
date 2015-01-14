@@ -1,66 +1,56 @@
 ﻿import World = require("./engine/world/world");
-import Entity = require("./engine/entity");
 import Systems = require("./engine/systems");
-import Movement = require("./engine/components/movement");
 import PlayerFactory = require("./engine/factories/player");
-import Vector2 = require("./engine/geometry/vector2");
+import Vector2 = require("./engine/geometry/vector2"); 
+import EntityManager = require("./engine/entitymanager");
 
 class Game {
     world: World;
     update;
     systems: Systems;
+    entityManager: EntityManager;
     isUpdated: boolean;
-    players: { [id: number]: { x: number; y: number}; };
+    players: {[id: number]: number};
     constructor() {
+        this.players = [];
+        this.entityManager = new EntityManager();
+
         this.world = new World();
         this.isUpdated = false;
-        this.update = {};
-        this.players = {};
+        this.update = null;
         this.systems = new Systems(this);
     }
 
     initializePlayer(id: number) {
-        this.update = {};
         do {
             var x = Math.floor((Math.random() * 18) + 1);
             var y = Math.floor((Math.random() * 8) + 1);
         } while (this.world.tiles[x][y].player != null);
         var position = new Vector2(x, y);
-        var player = PlayerFactory.new(id, this.world, position);
-        //player.getC(Position).contents;
-        player.addComponent(new Movement(this.systems.movement));
-        this.players[id] = {x: x, y: y};
+        var player = PlayerFactory.new(this.entityManager, id, position);
+        this.players[id] = player;
         var startingTile = this.world.tiles[x][y];
         startingTile.player = player;
-        this.update = { x: x, y: y }
-    }
-
-    getPlayer(id: number): Entity {
-        var player = this.players[id];
-        return (player != undefined) ? this.world.tiles[player.x][player.y].player : null;
+        this.update = new Vector2(x, y);
     }
 
     destroyPlayer(id: number): void {
-        this.update = {};
-        var player = this.getPlayer(id);
-        if (player == null)
-            return;
-        var position = player.getComponent(Transform).position;
-        this.update = { position: position }
-        //Remove the current entity from the group
+        var player = this.players[id]
+        var position = this.entityManager.getComponent(player, Transform).position;
+        this.update = position;
+        this.entityManager.destroyEntity(player);
         this.players[id] = undefined;
-        this.world.tiles[playerPosition.x][playerPosition.y].player = null;
+        this.world.tiles[position.x][position.y].player = null;
     }
 
+
     playerMove(id, direction) {
-        var player = this.getPlayer(id);
-        if (player == null)
+        var player = this.players[id];
+        if (player == undefined)
             return;
-        this.update = { id: id, destination: direction }
         this.isUpdated = true;
-        var destination = player.getComponent(Movement).move(player, direction);
-        this.players[id].x = destination.x;
-        this.players[id].y = destination.y;
+        var destination = this.systems.movement.movePlayer(player, direction);
+        this.update = { id: id, destination: destination }
     }
 }
 

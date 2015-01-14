@@ -36,17 +36,15 @@
     <TypeScriptCompile Include="app.ts" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <TypeScriptCompile Include="src\engine\components\movement.ts" />
     <TypeScriptCompile Include="src\engine\components\transform.ts" />
     <TypeScriptCompile Include="src\engine\entitymanager.ts" />
     <TypeScriptCompile Include="src\game.ts" />
-    <TypeScriptCompile Include="src\engine\entity.ts" />
     <TypeScriptCompile Include="src\engine\world\world.ts" />
     <TypeScriptCompile Include="src\engine\factories\player.ts" />
     <TypeScriptCompile Include="src\engine\systems.ts" />
     <TypeScriptCompile Include="src\engine\systems\movement.ts" />
     <TypeScriptCompile Include="src\engine\world\tile.ts" />
-    <TypeScriptCompile Include="src\engine\typings\app.d.ts" />
+    <TypeScriptCompile Include="src\typings\engine.d.ts" />
     <TypeScriptCompile Include="typings\node\node.d.ts" />
     <TypeScriptCompile Include="typings\socket.io\socket.io.d.ts" />
     <TypeScriptCompile Include="src\engine\geometry\vector2.ts" />
@@ -59,7 +57,7 @@
     <Folder Include="src\engine\" />
     <Folder Include="src\engine\world\" />
     <Folder Include="src\engine\systems\" />
-    <Folder Include="src\engine\typings\" />
+    <Folder Include="src\typings\" />
     <Folder Include="typings\" />
     <Folder Include="typings\socket.io\" />
     <Folder Include="typings\node\" />

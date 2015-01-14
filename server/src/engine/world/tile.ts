@@ -1,8 +1,6 @@
-﻿import Entity = require("../entity");
-
-class Tile {
-    entities: Array<Entity>;
-    player: Entity;
+﻿class Tile {
+    entities: number[];
+    player: number;
     texture: string;
     blocking: boolean;
 

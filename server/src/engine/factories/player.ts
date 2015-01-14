@@ -1,11 +1,10 @@
 ﻿import Transform = require("../components/transform");
-import Entity = require("../entity");
+import EntityManager = require("../entitymanager");
 
 class PlayerFactory {
-    static new(id: number, map: World, position: Vector2): Entity {
-        var player = new Entity(1, "player");
-        player.addComponent(new Transform(position));
-
+    static new(em: EntityManager, id: number, position: Vector2): number {
+        var player = em.createEntity("Player" + id);
+        em.addComponent(player, new Transform(position));
         return player;
     }
 }

@@ -1,6 +1,6 @@
 ﻿/// <reference path="typings/node/node.d.ts" />
 /// <reference path="typings/socket.io/socket.io.d.ts" />
-/// <reference path="src/engine/typings/app.d.ts" />
+/// <reference path="src/typings/engine.d.ts" />
 
 import Game = require('./src/game');
 
