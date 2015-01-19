@@ -1,10 +1,11 @@
 ﻿class Transform implements ITransform{
-    position: Vector2
 
-    constructor(position: Vector2) {
+    constructor(public position: Vector2, public volume?: number) {
+        if (!volume)
+            this.volume = 0;
     }
 
-    getName() {
+    getType() {
         return "Position";
     }
 }

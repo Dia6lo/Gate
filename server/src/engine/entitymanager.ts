@@ -41,10 +41,10 @@
     }
 
     addComponent(entity: number, component: Component): void {
-        var store = this.componentStore[component.getName()];
+        var store = this.componentStore[component.getType()];
         if (store == undefined) {
             store = {};
-            this.componentStore[component.getName()] = store;
+            this.componentStore[component.getType()] = store;
         }
         store[entity] = component;
     }
@@ -56,7 +56,7 @@
     }
 
     hasComponent<T extends Component>(entity: number, componentType: T) {
-        var store = this.componentStore[componentType.getName()];
+        var store = this.componentStore[componentType.getType()];
         if (store == undefined)
             return false;
         else
@@ -64,17 +64,17 @@
     }
 
     getComponent<T extends Component>(entity: number, componentType: T): T {
-        var store = this.componentStore[componentType.getName()];
+        var store = this.componentStore[componentType.getType()];
         if (store == undefined)
-            throw new Error("GET FAIL: there are no entities with a Component of class: " + componentType.getName());
+            throw new Error("GET FAIL: there are no entities with a Component of class: " + componentType.getType());
         var result: T = <T> store[entity];
         if (result == undefined)
-            throw new Error("GET FAIL: " + this.nameFor(entity) + " does not possess Component of class\n missing: " + componentType.getName());
+            throw new Error("GET FAIL: " + this.nameFor(entity) + " does not possess Component of class\n missing: " + componentType.getType());
         return result;
     }
 
     getAllComponentsOfType<T extends Component>(componentType: T): T[] {
-        var store = this.componentStore[componentType.getName()];
+        var store = this.componentStore[componentType.getType()];
         var result = [];
         if (store != undefined)
             for (var entity in store)
@@ -83,7 +83,7 @@
     }
 
     getAllEntitiesPossessingComponent<T extends Component>(componentType: T): number[] {
-        var store = this.componentStore[componentType.getName()];
+        var store = this.componentStore[componentType.getType()];
         var result = [];
         if (store != undefined)
             for (var entity in store)
@@ -103,9 +103,9 @@
     }
 
     removeComponent<T extends Component>(entity: number, componentType: T): void {
-        var store = this.componentStore[componentType.getName()];
+        var store = this.componentStore[componentType.getType()];
         if (store == undefined)
-            throw new Error("REMOVE FAIL: there are no entities with a Component of class: " + componentType.getName());
+            throw new Error("REMOVE FAIL: there are no entities with a Component of class: " + componentType.getType());
         store[entity] = undefined;
     }
 

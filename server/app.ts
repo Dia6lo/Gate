@@ -14,22 +14,22 @@ io.on('connection', function (socket) {
     count++;
     var playerId: number = count;
     console.log("connected player " + playerId.toString());
-    socket.emit('map', JSON.stringify(game.world));
-    game.initializePlayer(playerId);
-    io.emit('new_player', JSON.stringify(game.update));
+    socket.emit('map', JSON.stringify(game.worldManager));
+    game.systemManager.staticSystems.playerSystem.initializePlayer(playerId);
+    io.emit('new_player', JSON.stringify(game.systemManager.staticSystems.playerSystem.update));
     socket.on('disconnect', function () {
         console.log('disconnected player' + playerId.toString());
-        game.destroyPlayer(playerId);
-        io.emit('player_exit', JSON.stringify(game.update));
+        game.systemManager.staticSystems.playerSystem.destroyPlayer(playerId);
+        io.emit('player_exit', JSON.stringify(game.systemManager.staticSystems.playerSystem.update));
     });
 
     socket.on("move", function (data) {
         //console.log(JSON.stringify(game.players));
-        game.playerMove(playerId, data);
+        game.systemManager.staticSystems.playerSystem.playerMove(playerId, data);
         //console.log(JSON.stringify(game.update));
-        if (game.isUpdated) {
-            io.emit('map_update', JSON.stringify(game.update));
-            game.isUpdated = false;
+        if (game.systemManager.staticSystems.playerSystem.isUpdated) {
+            io.emit('map_update', JSON.stringify(game.systemManager.staticSystems.playerSystem.update));
+            game.systemManager.staticSystems.playerSystem.isUpdated = false;
         }
     });
 });
