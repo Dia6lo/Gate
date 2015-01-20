@@ -2,6 +2,7 @@
 import Tile = require("./world/tile");
 import Vector2 = require("./geometry/vector2");
 import WallFactory = require("./factories/wallfactory");
+import Transform = require("./components/transform");
 
 class WorldManager{
 
@@ -36,15 +37,20 @@ class WorldManager{
         this.entities[entity] = position;
         var tile = this.tiles[position.x][position.y];
         var volume = this.entityManager.getComponent(entity, Transform).volume;
-        tile.entities[entity] = volume;
+        tile.entities.push(entity);
         tile.volume += volume;
     }
 
     removeEntity(entity: number) {
         var position = this.entities[entity];
         var tile = this.tiles[position.x][position.y];
-        tile.volume -= tile.entities[entity];
-        tile.entities[entity] = undefined;
+        var index = tile.entities.indexOf(entity);
+        if (index === -1) {
+            return;
+        }
+        tile.entities.splice(index, 1);
+        var volume = this.entityManager.getComponent(entity, Transform).volume;
+        tile.volume -= volume;
     }
 
     moveEntity(entity: number, position: Vector2) {

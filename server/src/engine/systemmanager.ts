@@ -1,19 +1,21 @@
-﻿import Game = require("../game");
+﻿import EntityManager = require("./entitymanager");
+import WorldManager = require("./worldmanager");
 import MovementSystem = require("./systems/movementsystem");
 import PlayerSystem = require("./systems/playersystem");
 
 interface StaticSystems {
-    playerSystem: PlayerSystem
+    playerSystem: PlayerSystem;
+    movementSystem: MovementSystem;
 }
 
 class SystemManager {
-    movement: MovementSystem;
     staticSystems: StaticSystems;
     dynamicSystems: System[];
-    constructor(game: Game) {
-        this.movement = new MovementSystem(game.worldManager, game.entityManager);
+
+    constructor(private entityManager: EntityManager, private worldManager: WorldManager) {
         this.staticSystems = <any>{};
-        this.staticSystems.playerSystem = new PlayerSystem(game.worldManager, game.systemManager, game.entityManager);
+        this.staticSystems.playerSystem = new PlayerSystem(this.entityManager, this.worldManager, this);
+        this.staticSystems.movementSystem = new MovementSystem(this.entityManager, this.worldManager);
     }
 }
 

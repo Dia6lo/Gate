@@ -1,4 +1,4 @@
-﻿class Transform implements ITransform{
+﻿class Transform implements Component{
 
     constructor(public position: Vector2, public volume?: number) {
         if (!volume)
@@ -6,7 +6,7 @@
     }
 
     getType() {
-        return "Position";
+        return "Transform";
     }
 }
 

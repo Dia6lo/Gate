@@ -1,5 +1,5 @@
 ﻿class Tile {
-    entities: {[entity: number] : number}; //Dictionary entity->volume
+    entities: number[];
     volume: number;
 
     constructor(public floorType?: string) {

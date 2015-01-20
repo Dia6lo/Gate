@@ -8,26 +8,6 @@ interface Component {
     getType(): string;
 }
 
-//Components interfaces
-
-declare var Transform: ITransform;
-interface ITransform extends Component {
-    position: Vector2;
-    volume: number;
-}
-
-declare var Player: IPlayer;
-interface IPlayer extends Component {
-    name: string;
-}
-
-
-declare var Construct: IConstruct;
-interface IConstruct extends Component {
-    type: string;
-}
-
-
 /*
     SYSTEMS
 */

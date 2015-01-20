@@ -10,7 +10,7 @@ class Game {
     constructor() {
         this.entityManager = new EntityManager();
         this.worldManager = new WorldManager(this.entityManager);        
-        this.systemManager = new SystemManager(this);
+        this.systemManager = new SystemManager(this.entityManager, this.worldManager);
     }
 }
 

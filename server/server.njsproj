@@ -35,9 +35,8 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <Content Include="package.json" />
-    <Content Include="README.md" />
-    <TypeScriptCompile Include="src\engine\components\construct.ts" />
     <TypeScriptCompile Include="src\engine\components\player.ts" />
+    <TypeScriptCompile Include="src\engine\components\render.ts" />
     <TypeScriptCompile Include="src\engine\components\transform.ts" />
     <TypeScriptCompile Include="src\engine\entitymanager.ts" />
     <TypeScriptCompile Include="src\engine\factories\wallfactory.ts" />

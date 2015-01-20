@@ -1,4 +1,4 @@
-﻿class Player implements IPlayer {
+﻿class Player implements Component {
 
     constructor(public name?: string) {
     }
