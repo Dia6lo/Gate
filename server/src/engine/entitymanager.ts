@@ -30,7 +30,7 @@
     createEntity(name?: string): number {
         var entity = this.generateNewEntityID();
         if (entity < 1) {
-            return 0; //And I'm like "WTF?"
+            throw new Error("WTF? Entity < 1");
         }
         else {
             this.entityStore.push(entity);
