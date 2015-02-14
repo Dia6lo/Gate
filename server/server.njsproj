@@ -37,12 +37,13 @@
     <Content Include="package.json" />
     <TypeScriptCompile Include="src\engine\components\player.ts" />
     <TypeScriptCompile Include="src\engine\components\render.ts" />
+    <TypeScriptCompile Include="src\engine\factories\test.ts" />
     <TypeScriptCompile Include="src\engine\components\transform.ts" />
     <TypeScriptCompile Include="src\engine\entitymanager.ts" />
     <TypeScriptCompile Include="src\engine\factories\wallfactory.ts" />
     <TypeScriptCompile Include="src\engine\systems\playersystem.ts" />
     <TypeScriptCompile Include="src\game.ts" />
-    <TypeScriptCompile Include="src\engine\worldmanager.ts" />
+    <TypeScriptCompile Include="src\engine\systems\worldsystem.ts" />
     <TypeScriptCompile Include="src\engine\factories\playerfactory.ts" />
     <TypeScriptCompile Include="src\engine\systemmanager.ts" />
     <TypeScriptCompile Include="src\engine\systems\movementsystem.ts" />

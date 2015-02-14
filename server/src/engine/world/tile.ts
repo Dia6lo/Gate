@@ -1,8 +1,8 @@
-﻿class Tile {
+﻿class Tile implements ITile{
     entities: number[];
     volume: number;
 
-    constructor(public floorType?: string) {
+    constructor(private _maxVolume: number, public floorType?: string) {
         this.entities = [];
         this.volume = 0;
         if (!floorType)

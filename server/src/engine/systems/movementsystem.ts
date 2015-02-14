@@ -1,12 +1,16 @@
 ﻿import EntityManager = require("../entitymanager");
-import WorldManager = require("../worldmanager");
+import WorldSystem = require("./worldsystem");
 import Vector2 = require("../geometry/vector2");
 import Transform = require("../components/transform");
 
-class MovementSystem {
+class MovementSystem implements System{
     static maxTileVolume = 100;
+    
+    constructor(private entityManager: EntityManager, private world: WorldSystem) {
+    }
 
-    constructor(private entityManager: EntityManager, private world: WorldManager) {
+    newCla(a: number): Cla {
+        return {a: a};
     }
 
     moveEntity(entity: number, destination: Vector2): boolean {

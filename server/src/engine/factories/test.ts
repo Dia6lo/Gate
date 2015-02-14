@@ -1,0 +1,3 @@
+﻿class ComponentFactory {
+    static new
+}

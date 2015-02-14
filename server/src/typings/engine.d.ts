@@ -4,8 +4,13 @@
 
 
 //Main interface
+//TODO: make name final (SOMEHOW)
 interface Component {
-    getType(): string;
+    componentName: string;
+}
+
+interface Player extends Component {
+    a: number;
 }
 
 /*
@@ -24,9 +29,11 @@ interface System {
 */
 
 
-interface Tile {
-    entities: { [entity: number]: number };
+interface ITile {
+    entities: number[];
     volume: number;
+
+
 }
 
 

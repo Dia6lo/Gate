@@ -1,25 +1,27 @@
-﻿class EntityManager {
-    private lowestUnassignedEntityID: number;
-    private entityStore: number[];
-    private entityHumanReadableNames: { [entity: number]: string };
-    private componentStore: { [name: string]: { [entity: number]: Component } };
+﻿//SUGGESTION: Transform it to system?
+
+class EntityManager {
+    private _lowestUnassignedEntityID: number;
+    private _entityStore: number[];
+    private _entityHumanReadableNames: { [entity: number]: string };
+    private _componentStore: { [name: string]: { [entity: number]: Component } };
 
     constructor() {
-        this.lowestUnassignedEntityID = 1;
-        this.entityStore = [];
-        this.componentStore = {};
-        this.entityHumanReadableNames = [];
+        this._lowestUnassignedEntityID = 1;
+        this._entityStore = [];
+        this._componentStore = {};
+        this._entityHumanReadableNames = [];
     }
 
-    generateNewEntityID(): number {
+    private _generateNewEntityID(): number {
         //TODO: Make it synchronous
         {
-            if (this.lowestUnassignedEntityID < Number.MAX_VALUE) {
-                return this.lowestUnassignedEntityID++;
+            if (this._lowestUnassignedEntityID < Number.MAX_VALUE) {
+                return this._lowestUnassignedEntityID++;
             }
             else {
                 for (var i = 1; i < Number.MAX_VALUE; i++) {
-                    if (this.entityStore.indexOf(i) != -1)
+                    if (this._entityStore.indexOf(i) != -1)
                         return i;
                 }
                 throw new Error("ERROR: no available Entity IDs; too many entities!");
@@ -28,23 +30,23 @@
     }
 
     createEntity(name?: string): number {
-        var entity = this.generateNewEntityID();
+        var entity = this._generateNewEntityID();
         if (entity < 1) {
             throw new Error("WTF? Entity < 1");
         }
         else {
-            this.entityStore.push(entity);
+            this._entityStore.push(entity);
             if (name)
-                this.entityHumanReadableNames[entity] = name;
+                this._entityHumanReadableNames[entity] = name;
             return entity;
         }
     }
 
     addComponent(entity: number, component: Component): void {
-        var store = this.componentStore[component.getType()];
+        var store = this._componentStore[component.getType()];
         if (store == undefined) {
             store = {};
-            this.componentStore[component.getType()] = store;
+            this._componentStore[component.getType()] = store;
         }
         store[entity] = component;
     }
@@ -55,16 +57,16 @@
         }
     }
 
-    hasComponent<T extends Component>(entity: number, componentType: { prototype: T}) {
-        var store = this.componentStore[componentType.prototype.getType()];
+    hasComponent<T extends Component>(entity: number, componentType: { prototype: T }) {
+        var store = this._componentStore[componentType.prototype.getType()];
         if (store == undefined)
             return false;
         else
             return store[entity] != undefined;
     }
 
-    getComponent<T extends Component>(entity: number, componentType: { prototype: T}): T {
-        var store = this.componentStore[componentType.prototype.getType()];
+    getComponent<T extends Component>(entity: number, componentType: { prototype: T }): T {
+        var store = this._componentStore[componentType.prototype.getType()];
         if (store == undefined)
             throw new Error("GET FAIL: there are no entities with a Component of class: " + componentType.prototype.getType());
         var result: T = <T> store[entity];
@@ -73,8 +75,8 @@
         return result;
     }
 
-getAllComponentsOfType<T extends Component>(componentType:{ prototype: T }): T[] {
-        var store = this.componentStore[componentType.prototype.getType()];
+    getAllComponentsOfType<T extends Component>(componentType: { prototype: T }): T[] {
+        var store = this._componentStore[componentType.prototype.getType()];
         var result = [];
         if (store != undefined)
             for (var entity in store)
@@ -82,8 +84,8 @@ getAllComponentsOfType<T extends Component>(componentType:{ prototype: T }): T[]
         return result;
     }
 
-getAllEntitiesPossessingComponent<T extends Component>(componentType: { prototype: T }): number[] {
-        var store = this.componentStore[componentType.prototype.getType()];
+    getAllEntitiesPossessingComponent<T extends Component>(componentType: { prototype: T }): number[] {
+        var store = this._componentStore[componentType.prototype.getType()];
         var result = [];
         if (store != undefined)
             for (var entity in store)
@@ -93,8 +95,8 @@ getAllEntitiesPossessingComponent<T extends Component>(componentType: { prototyp
 
     getAllComponentsOnEntity<T extends Component>(entity: number): T[] {
         var components: T[] = [];
-        for (var componentType in this.componentStore) {
-            var component = this.componentStore[componentType][entity];
+        for (var componentType in this._componentStore) {
+            var component = this._componentStore[componentType][entity];
             if (component == undefined)
                 continue;
             components.push(<T>component);
@@ -103,7 +105,7 @@ getAllEntitiesPossessingComponent<T extends Component>(componentType: { prototyp
     }
 
     removeComponent<T extends Component>(entity: number, componentType: { prototype: T }): void {
-        var store = this.componentStore[componentType.prototype.getType()];
+        var store = this._componentStore[componentType.prototype.getType()];
         if (store == undefined)
             throw new Error("REMOVE FAIL: there are no entities with a Component of class: " + componentType.prototype.getType());
         store[entity] = undefined;
@@ -117,15 +119,15 @@ getAllEntitiesPossessingComponent<T extends Component>(componentType: { prototyp
 
     destroyEntity(entity: number): void {
         //TODO: Make it synchronous
-        var index = this.entityStore.indexOf(entity);
+        var index = this._entityStore.indexOf(entity);
         if (index == -1) {
             return;
         }
-        this.entityStore.splice(index, 1);
-        if (entity == this.lowestUnassignedEntityID)
-            this.lowestUnassignedEntityID--;
-        for (var componentType in this.componentStore) {
-            this.componentStore[componentType][entity] = undefined;
+        this._entityStore.splice(index, 1);
+        if (entity == this._lowestUnassignedEntityID)
+            this._lowestUnassignedEntityID--;
+        for (var componentType in this._componentStore) {
+            this._componentStore[componentType][entity] = undefined;
         }
     }
 
@@ -136,11 +138,11 @@ getAllEntitiesPossessingComponent<T extends Component>(componentType: { prototyp
     }
 
     setEntityName(entity: number, name: string): void {
-        this.entityHumanReadableNames[entity] = name;
+        this._entityHumanReadableNames[entity] = name;
     }
 
     nameFor(entity: number): string {
-        return this.entityHumanReadableNames[entity];
+        return this._entityHumanReadableNames[entity];
     }
 }
 

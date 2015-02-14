@@ -1,5 +1,6 @@
 ﻿import EntityManager = require("../entitymanager");
-import WorldManager = require("../worldmanager");
+import WorldSystem = require("./worldsystem");
+import MovementSystem = require("./movementsystem");
 import SystemManager = require("../systemmanager");
 import Vector2 = require("../geometry/vector2");
 import PlayerFactory = require("../factories/playerfactory");
@@ -8,28 +9,28 @@ import Render = require("../components/render");
 import SocketServer = require('socket.io');
 
 class PlayerSystem implements System {
-    private players: { [id: number]: number };
-    private lowestUnassignedPlayerID: number;
-    private io: SocketIO.Server;
+    private _players: { [id: number]: number };
+    private _lowestUnassignedPlayerID: number;
+    private _io: SocketIO.Server;
 
-    constructor(private entityManager: EntityManager, private worldManager: WorldManager, private systemManager: SystemManager) {
-        this.players = [];
-        this.io = SocketServer();
-        this.lowestUnassignedPlayerID = 1;
-        this.io.on('connection', this.onSocketConnect.bind(this));
-        this.io.listen(8080)
+    constructor(private _entityManager: EntityManager, private _worldSystem: WorldSystem, private _movementSystem: MovementSystem) {
+        this._players = [];
+        this._io = SocketServer();
+        this._lowestUnassignedPlayerID = 1;
+        this._io.on('connection', this._onPlayerConnect.bind(this));
+        this._io.listen(8080)
         console.log('Server started on 8080');
     }
 
-    generateNewPlayerID(): number {
+    private _generateNewPlayerID(): number {
         //TODO: Make it synchronous
         {
-            if (this.lowestUnassignedPlayerID < Number.MAX_VALUE) {
-                return this.lowestUnassignedPlayerID++;
+            if (this._lowestUnassignedPlayerID < Number.MAX_VALUE) {
+                return this._lowestUnassignedPlayerID++;
             }
             else {
                 for (var i = 1; i < Number.MAX_VALUE; i++) {
-                    if (this.players[i] != undefined)
+                    if (this._players[i] != undefined)
                         return i;
                 }
                 throw new Error("ERROR: no available Entity IDs; too many entities!");
@@ -37,67 +38,70 @@ class PlayerSystem implements System {
         }
     }
 
-    onSocketConnect(socket: SocketIO.Socket) {
+    private _onPlayerConnect(socket: SocketIO.Socket) {
         var playerInfo = this.initializePlayer();
         var playerId = playerInfo.id;
         console.log("connected player " + playerId.toString());
-        this.io.emit('new_player', JSON.stringify(playerInfo));
+        this._io.emit('new_player', JSON.stringify(playerInfo));
         socket.emit('map', JSON.stringify(this.getMap(playerId)));
-        socket.on('disconnect', function () {
-            console.log('disconnected player' + playerId.toString());
-            this.io.emit('player_exit', JSON.stringify(this.destroyPlayer(playerId)));
-        });
+        socket.on('disconnect', this._onPlayerDisconnect.bind(this, playerId));
+        socket.on("move", this._onPlayerMove.bind(this, playerId));
+    }
 
-        socket.on("move", function (data) {
-            var moving = this.movePlayer(playerId, data);
-            if (moving.moved) {
-                var update = { id: moving.id, destination: moving.destination };
-                this.io.emit('map_update', JSON.stringify(update));
-            }
-        });
+    private _onPlayerDisconnect(playerId: number) {
+        console.log('disconnected player ' + playerId.toString());
+        this._io.emit('player_exit', JSON.stringify(this.destroyPlayer(playerId)));
+    }
+
+    private _onPlayerMove(data, playerId: number) {
+        var moving = this.movePlayer(playerId, data);
+        if (moving.moved) {
+            var update = { id: moving.id, destination: moving.destination };
+            this._io.emit('map_update', JSON.stringify(update));
+        }
     }
 
     initializePlayer(): { id: number; position: Vector2 } {
         do {
             var x = Math.floor((Math.random() * 18) + 1);
             var y = Math.floor((Math.random() * 8) + 1);
-        } while (this.worldManager.tiles[x][y].volume > 50);
+        } while (this._worldSystem.tiles[x][y].volume > 50);
         var position = new Vector2(x, y);
-        var id = this.generateNewPlayerID();
+        var id = this._generateNewPlayerID();
         if (id < 1) {
             throw new Error("WTF? PlayerID < 1");
         }
-        var player = PlayerFactory.new(this.entityManager, id, position);
-        this.players[id] = player;
-        this.worldManager.addEntity(new Vector2(x, y), player);
+        var player = PlayerFactory.new(this._entityManager, id, position);
+        this._players[id] = player;
+        this._worldSystem.addEntity(new Vector2(x, y), player);
         return { id: id, position: new Vector2(x, y) };
     }
 
     destroyPlayer(id: number): { id: number; position: Vector2 } {
-        var player = this.players[id]
-        var position = this.entityManager.getComponent(player, Transform).position;
-        this.worldManager.removeEntity(player);
-        this.entityManager.destroyEntity(player);
-        this.players[id] = undefined;
+        var player = this._players[id]
+        var position = this._entityManager.getComponent(player, Transform).position;
+        this._worldSystem.removeEntity(player);
+        this._entityManager.destroyEntity(player);
+        this._players[id] = undefined;
         return { id: id, position: position };
     }
 
 
     movePlayer(id: number, direction: string): { id: number; moved: boolean; destination: Vector2 } {
-        var player = this.players[id];
+        var player = this._players[id];
         if (player == undefined)
             return;
-        var offset = this.getOffset(direction);
-        var position = this.entityManager.getComponent(player, Transform).position;
+        var offset = this._getOffset(direction);
+        var position = this._entityManager.getComponent(player, Transform).position;
         var destination = position.combine(offset);
-        if (this.systemManager.staticSystems.movementSystem.moveEntity(player, destination))
+        if (this._movementSystem.moveEntity(player, destination))
             return { id: player, moved: true, destination: destination };
         return { id: player, moved: false, destination: destination };
 
     }
 
 
-    getOffset(direction: string): Vector2 {
+    private _getOffset(direction: string): Vector2 {
         var movement = new Vector2(0, 0);
         switch (direction) {
             case ("left"):
@@ -117,8 +121,8 @@ class PlayerSystem implements System {
     }
 
     getMap(id: number): { floorType: string; entities: { entity: number; type: string }[] }[][] {
-        var world = this.worldManager;
-        var player = this.players[id];
+        var world = this._worldSystem;
+        var player = this._players[id];
         var output: { floorType: string; entities: { entity: number; type: string }[] }[][] = []
         for (var x = 0; x < world.settings.tilesX; x++) {
             output[x] = [];
@@ -128,7 +132,7 @@ class PlayerSystem implements System {
                 for (var i = 0; i < tile.entities.length; i++)
                 {
                     var entity = tile.entities[i];
-                    entities.push({ entity: entity, type: this.entityManager.getComponent(entity, Render).type });
+                    entities.push({ entity: entity, type: this._entityManager.getComponent(entity, Render).type });
                 }
                 output[x][y] = { floorType: tile.floorType, entities: entities };
             }
