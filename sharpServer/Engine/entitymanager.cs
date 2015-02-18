@@ -1,5 +1,4 @@
-﻿using SharpServer.Engine.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +12,7 @@ namespace SharpServer.Engine
         private Dictionary<int, string> entityHumanReadableNames;
         private List<int> entityStore;
         private int lowestUnassignedEntityID;
+
         public EntityManager()
         {
             lowestUnassignedEntityID = 1;

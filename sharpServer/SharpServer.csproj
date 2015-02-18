@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fleck">
+    <Reference Include="Fleck, Version=0.12.0.38, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Fleck.0.12.0.38\lib\net40\Fleck.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -45,8 +46,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\Components\Component.cs" />
-    <Compile Include="Engine\Components\Transorm.cs" />
+    <Compile Include="Engine\Components\Player.cs" />
+    <Compile Include="Engine\Components\Render.cs" />
+    <Compile Include="Engine\Components\Shape.cs" />
+    <Compile Include="Engine\Components\Tile.cs" />
+    <Compile Include="Engine\Components\Transform.cs" />
     <Compile Include="Engine\EntityManager.cs" />
+    <Compile Include="Engine\Factories\PlayerFactory.cs" />
+    <Compile Include="Engine\Factories\WallFactory.cs" />
+    <Compile Include="Engine\Geometry\Vector2.cs" />
+    <Compile Include="Engine\SystemManager.cs" />
+    <Compile Include="Engine\Systems\MovementSystem.cs" />
+    <Compile Include="Engine\Systems\PlayerSystem.cs" />
+    <Compile Include="Engine\Systems\WorldSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -54,6 +66,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SharpServer.Engine.Components
+﻿namespace SharpServer.Engine
 {
-    interface Component
+    internal interface Component
     {
     }
 }
