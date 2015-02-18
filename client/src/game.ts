@@ -57,7 +57,7 @@ class Game {
     }
 
     update() {
-        //requestAnimationFrame(this.update.bind(this));
+        requestAnimationFrame(this.update.bind(this));
         this.renderer.render(this.stage);
     }
 
