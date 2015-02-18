@@ -18,10 +18,5 @@ namespace SharpServer
             //Console.WriteLine("Server started");
             Console.ReadKey();
         }
-
-        private static void a(string m)
-        {
-            int a = 1;
-        }
     }
 }
