@@ -1,5 +1,5 @@
 ﻿//SUGGESTION: Transform it to system?
-
+//TODO: make it use data from DB
 class EntityManager {
     private _lowestUnassignedEntityID: number;
     private _entityStore: number[];
@@ -43,10 +43,10 @@ class EntityManager {
     }
 
     addComponent(entity: number, component: Component): void {
-        var store = this._componentStore[component.getType()];
+        var store = this._componentStore[component.componentName];
         if (store == undefined) {
             store = {};
-            this._componentStore[component.getType()] = store;
+            this._componentStore[component.componentName] = store;
         }
         store[entity] = component;
     }
@@ -57,8 +57,8 @@ class EntityManager {
         }
     }
 
-    hasComponent<T extends Component>(entity: number, componentType: { prototype: T }) {
-        var store = this._componentStore[componentType.prototype.getType()];
+    hasComponent<T extends Component>(entity: number) {
+        var store = this._componentStore[typeof T];
         if (store == undefined)
             return false;
         else

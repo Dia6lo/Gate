@@ -5,7 +5,7 @@
 import Game = require("src/game");
 
 var Intialize = function initializeCanvas() {
-    
+   
     //Create a new game
     var game = new Game();
 };

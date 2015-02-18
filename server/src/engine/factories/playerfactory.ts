@@ -1,4 +1,5 @@
-﻿import Transform = require("../components/transform");
+﻿
+import Transform = require("../components/transform");
 import Player = require("../components/player");
 import Render = require("../components/render");
 import EntityManager = require("../entitymanager");

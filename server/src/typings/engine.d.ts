@@ -4,15 +4,27 @@
 
 
 //Main interface
-//TODO: make name final (SOMEHOW)
+//TODO: make componentName final (SOMEHOW)
 interface Component {
     componentName: string;
 }
 
 interface Player extends Component {
-    a: number;
+    name: string;
 }
 
+interface Render extends Component {
+    type: string;
+}
+
+
+interface Shape extends Component {
+    volume: number;
+}
+
+interface Transform extends Component {
+    position: Vector2;
+}
 /*
     SYSTEMS
 */
