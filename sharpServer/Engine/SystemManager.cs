@@ -23,14 +23,11 @@ namespace SharpServer.Engine
             }
         }
 
-        private class SystemManager
-        {
-            private StaticSystems staticSystems;
+        private StaticSystems staticSystems;
 
-            private SystemManager(EntityManager entityManager)
-            {
-                staticSystems = new StaticSystems(entityManager);
-            }
+        public SystemManager(EntityManager entityManager)
+        {
+            staticSystems = new StaticSystems(entityManager);
         }
     }
 }

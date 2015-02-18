@@ -13,6 +13,7 @@ namespace SharpServer.Engine.Systems
 
         public WorldSystem(EntityManager em)
         {
+            positions = new Dictionary<int, Vector2>();
             entityManager = em;
             tilesX = 20;
             tilesY = 10;

@@ -3,8 +3,6 @@
     socket: Socket;
     connected: boolean;
     constructor(game) {
-        var Socket = new WebSocket("ws://127.0.0.1:8080");
-        Socket.send("asdasdasd");
         this.game = game;
         this.socket = io.connect("127.0.0.1:8080");
         this.socket.on('connect', function () {

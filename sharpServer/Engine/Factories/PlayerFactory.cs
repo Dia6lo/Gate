@@ -8,6 +8,7 @@
             em.addComponent(player, new Transform(position));
             em.addComponent(player, new Player("Player " + id));
             em.addComponent(player, new Render("Player"));
+            em.addComponent(player, new Shape(75));
             return player;
         }
     }
