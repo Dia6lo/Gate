@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpServer.Engine.Systems
+namespace SharpServer.Engine.Services
 {
-    internal class WorldSystem
+    internal class WorldService: Service
     {
         public int tilesX;
         public int tilesY;
-        public Tile[,] tiles;
+        public int[,] tiles;
         private Dictionary<int, Vector2> positions; //entity -> position
         private EntityManager entityManager;
 
-        public WorldSystem(EntityManager em)
+        public WorldService(EntityManager em)
         {
             positions = new Dictionary<int, Vector2>();
             entityManager = em;
             tilesX = 20;
             tilesY = 10;
-            tiles = new Tile[tilesX, tilesY];
+            tiles = new int[tilesX, tilesY];
             initialize();
         }
 
@@ -27,7 +27,7 @@ namespace SharpServer.Engine.Systems
             {
                 for (var y = 0; y < tilesY; y++)
                 {
-                    tiles[x, y] = new Tile();
+                    tiles[x, y] = Factories.TileFactory.newDungeon(entityManager, new Vector2(x, y));
                     if ((y == 0) || (y == tilesY - 1) || (x == 0) || (x == tilesX - 1))
                     {
                         var wall = Factories.WallFactory.newWall(entityManager, new Vector2(x, y));
@@ -40,21 +40,22 @@ namespace SharpServer.Engine.Systems
         public void addEntity(Vector2 position, int entity)
         {
             positions[entity] = position;
-            var tile = tiles[position.x, position.y];
+            var tile = entityManager.getComponent<Tile>(tiles[position.x, position.y]);
             var volume = entityManager.getComponent<Shape>(entity).volume;
             tile.entities.Add(entity);
-            tile.volume += volume;
+            tile.containingVolume += volume;
         }
 
         public void removeEntity(int entity)
         {
             var position = positions[entity];
             var tile = this.tiles[position.x, position.y];
-            if (!tile.entities.Contains(entity))
+            var entities = entityManager.getComponent<Tile>(tile).entities;
+            if (!entities.Contains(entity))
                 throw new MissingMemberException("REMOVE ERROR: there is no entity " + entityManager.nameFor(entity) + "(ID: " + entity + ") in tile " + position.x + ":" + position.y);
-            tile.entities.Remove(entity);
+            entities.Remove(entity);
             var volume = entityManager.getComponent<Shape>(entity).volume;
-            tile.volume -= volume;
+            entityManager.getComponent<Shape>(tile).volume -= volume;
         }
 
         public void moveEntity(int entity, Vector2 position)

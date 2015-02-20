@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SharpServer.Engine
 {
-    // SUGGESTION: Transform it to system?
+    // SUGGESTION: Transform it to service?
     // TODO: make it use data from DB
     internal class EntityManager
     {

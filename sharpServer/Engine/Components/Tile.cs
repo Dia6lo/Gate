@@ -5,13 +5,15 @@ namespace SharpServer.Engine
     internal class Tile : Component
     {
         public static int maxVolume = 100;
+        public string floorType;
         public List<int> entities;
-        public int volume;
+        public int containingVolume;
 
-        public Tile()
+        public Tile(string floorType)
         {
+            this.floorType = floorType;
             entities = new List<int>();
-            volume = 0;
+            containingVolume = 0;
         }
     }
 }

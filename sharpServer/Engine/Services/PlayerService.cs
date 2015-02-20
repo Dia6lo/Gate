@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 
 // WARNING: THIS US BULLSHIT
-namespace SharpServer.Engine.Systems
+namespace SharpServer.Engine.Services
 {
-    internal class PlayerSystem
+    internal class PlayerService: Service
     {
         private struct Message
         {
@@ -25,11 +25,11 @@ namespace SharpServer.Engine.Systems
 
         private int lowestUnassignedPlayerID;
         private EntityManager entityManager;
-        private WorldSystem worldSystem;
-        private MovementSystem movementSystem;
+        private WorldService worldSystem;
+        private MovementService movementSystem;
         private WebSocketServer server;
 
-        public PlayerSystem(EntityManager entityManager, WorldSystem worldSystem, MovementSystem movementSystem)
+        public PlayerService(EntityManager entityManager, WorldService worldSystem, MovementService movementSystem)
         {
             this.entityManager = entityManager;
             this.worldSystem = worldSystem;
@@ -113,6 +113,10 @@ namespace SharpServer.Engine.Systems
         private struct Direction
         {
             public string direction;
+            public Direction(string direction)
+            {
+                this.direction = direction;
+            }
         }
 
         private void handleMessage(string message, int id)
@@ -141,7 +145,7 @@ namespace SharpServer.Engine.Systems
             {
                 x = rand.Next(1, 19);
                 y = rand.Next(1, 9);
-            } while (worldSystem.tiles[x, y].volume > 50);
+            } while ( entityManager.getComponent<Engine.Tile>(worldSystem.tiles[x, y]).containingVolume > 50);
             var position = new Vector2(x, y);
             var id = generateNewPlayerID();
             if (id < 1)
@@ -238,8 +242,7 @@ namespace SharpServer.Engine.Systems
                 for (var y = 0; y < world.tilesY; y++)
                 {
                     var tile = world.tiles[x, y];
-
-                    var entities = tile.entities
+                    var entities = entityManager.getComponent<Engine.Tile>(tile).entities
                         .ConvertAll<Entity>(entity => new Entity(entity, entityManager.getComponent<Render>(entity).type))
                         .ToArray();
                     tiles[x, y] = new Tile("Dungeon", entities);

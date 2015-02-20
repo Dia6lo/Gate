@@ -1,11 +1,11 @@
-﻿namespace SharpServer.Engine.Systems
+﻿namespace SharpServer.Engine.Services
 {
-    internal class MovementSystem
+    internal class MovementService: Service
     {
         private EntityManager entityManager;
-        private WorldSystem worldSystem;
+        private WorldService worldSystem;
 
-        public MovementSystem(EntityManager entityManager, WorldSystem worldSystem)
+        public MovementService(EntityManager entityManager, WorldService worldSystem)
         {
             this.entityManager = entityManager;
             this.worldSystem = worldSystem;
@@ -14,9 +14,8 @@
         public bool moveEntity(int entity, Vector2 destination)
         {
             var position = entityManager.getComponent<Transform>(entity).position;
-            var startingTile = worldSystem.tiles[position.x, position.y];
             var finishTile = worldSystem.tiles[destination.x, destination.y];
-            if (finishTile.volume + entityManager.getComponent<Shape>(entity).volume < Tile.maxVolume)
+            if (entityManager.getComponent<Tile>(finishTile).containingVolume + entityManager.getComponent<Shape>(entity).volume < Tile.maxVolume)
             {
                 position.x = destination.x;
                 position.y = destination.y;

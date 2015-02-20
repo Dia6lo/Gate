@@ -1,4 +1,4 @@
-﻿using SharpServer.Engine.Systems;
+﻿using SharpServer.Engine.Services;
 
 namespace SharpServer.Engine
 {
@@ -6,17 +6,17 @@ namespace SharpServer.Engine
     {
         private class StaticSystems
         {
-            private PlayerSystem playerSystem;
-            private MovementSystem movementSystem;
-            private WorldSystem worldSystem;
+            private PlayerService playerSystem;
+            private MovementService movementSystem;
+            private WorldService worldSystem;
 
             public StaticSystems(EntityManager entityManager)
             {
-                worldSystem = new WorldSystem(entityManager);
-                movementSystem = new MovementSystem(
+                worldSystem = new WorldService(entityManager);
+                movementSystem = new MovementService(
                     entityManager,
                     worldSystem);
-                playerSystem = new PlayerSystem(
+                playerSystem = new PlayerService(
                     entityManager,
                     worldSystem,
                     movementSystem);
