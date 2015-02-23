@@ -4,17 +4,21 @@
 
 import Game = require("src/game");
 
-var Intialize = function initializeCanvas() {
-   
+var Intialize = function initializeCanvas(data: string) {
+    var a: Message = JSON.parse(data);
+    var b = JSON.parse(a.Body);
     //Create a new game
     var game = new Game();
 };
 
+interface Message {
+    Head: string;
+    Body: string;
+}
+
 require([],() => {
     var Socket = new WebSocket("ws://127.0.0.1:8080");
     Socket.onmessage = function (evt) {
-        var a = JSON.parse(evt.data);
-        var b = JSON.parse(a.body);
+        Intialize(evt.data);
     };
-    Intialize();
 });

@@ -25,9 +25,9 @@ namespace SharpServer.Engine.Services
                 playersToSockets[player].Send(message);
         }
 
-        public static string DebugMessage(string header, object obj)
+        public static string DebugMessage(string header, object body)
         {
-            return CreateMessage(header, obj);
+            return CreateMessage(header, body);
         }
 
         static public void SendMessage(string header, object body, int player)
@@ -42,9 +42,10 @@ namespace SharpServer.Engine.Services
             Console.WriteLine("Server started on 8080");
             Console.ReadKey();
         }
-        private static string CreateMessage(string header, object obj)
+        private static string CreateMessage(string header, object body)
         {
-            return JsonConvert.SerializeObject(new Message(header, JsonConvert.SerializeObject(obj)));
+            var message = new Message(header, JsonConvert.SerializeObject(body));
+            return JsonConvert.SerializeObject(message);
         }
         static private void HandleMessage(string message, int id)
         {
@@ -63,6 +64,7 @@ namespace SharpServer.Engine.Services
         {
             var id = PlayerService.InitializePlayer();
             playersToSockets[id] = socket;
+            PlayerService.SendSurroundings(id);
             Console.WriteLine("connected player " + id);
             socket.OnClose = () => OnPlayerDisconnect(id);
             socket.OnMessage = message => HandleMessage(message, id);
@@ -91,8 +93,8 @@ namespace SharpServer.Engine.Services
         }
         private struct Message
         {
-            public string Body;
             public string Header;
+            public string Body;
             public Message(string header, string body)
             {
                 Header = header;

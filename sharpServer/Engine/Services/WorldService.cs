@@ -5,9 +5,9 @@ namespace SharpServer.Engine.Services
 {
     internal static class WorldService
     {
-        static public int[,] Tiles = new int[TilesX, TilesY];
         static public int TilesX = 20;
         static public int TilesY = 10;
+        static public int[,] Tiles = new int[TilesX, TilesY];
         static private Dictionary<int, Vector2> positions = new Dictionary<int, Vector2>(); //entity -> position
 
         static public void AddEntity(Vector2 position, int entity)
@@ -27,7 +27,7 @@ namespace SharpServer.Engine.Services
             {
                 x = rand.Next(1, 19);
                 y = rand.Next(1, 9);
-            } while (EntityManager.GetComponent<Engine.Tile>(Tiles[x, y]).ContainingVolume > 50);
+            } while (EntityManager.GetComponent<Tile>(Tiles[x, y]).ContainingVolume > 50);
             return new Vector2(x, y);
         }
 
@@ -50,6 +50,46 @@ namespace SharpServer.Engine.Services
         {
             RemoveEntity(entity);
             AddEntity(position, entity);
+        }
+
+         public struct Entity
+        {
+            public int entity;
+            public string type;
+
+            public Entity(int entity, string type)
+            {
+                this.entity = entity;
+                this.type = type;
+            }
+        }
+
+        public struct Cell
+        {
+            public Entity[] entities;
+            public string floorType;
+            public Cell(string floorType, Entity[] entities)
+            {
+                this.floorType = floorType;
+                this.entities = entities;
+            }
+        }
+
+        public static Cell[,] GetSurroundings(int entity, int radius)
+        {
+            var tiles = new Cell[TilesX, TilesY];
+            for (var x = 0; x < TilesX; x++)
+            {
+                for (var y = 0; y < TilesY; y++)
+                {
+                    var tile = EntityManager.GetComponent<Tile>(Tiles[x, y]);
+                    var entities = tile.Entities
+                        .ConvertAll<Entity>(id => new Entity(id, EntityManager.GetComponent<Render>(id).Type))
+                        .ToArray();
+                    tiles[x, y] = new Cell(tile.FloorType, entities);
+                }
+            }
+            return tiles;
         }
 
         static public void RemoveEntity(int entity)

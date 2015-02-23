@@ -18,24 +18,6 @@ namespace SharpServer.Engine.Services
             ConnectionService.BroadcastToAll("player_exit", new PlayerInfo(id, position));
         }
 
-        public static Tile[,] GetMap(int id)
-        {
-            var player = playersToEntities[id];
-            var tiles = new Tile[WorldService.TilesX, WorldService.TilesY];
-            for (var x = 0; x < WorldService.TilesX; x++)
-            {
-                for (var y = 0; y < WorldService.TilesY; y++)
-                {
-                    var tile = WorldService.Tiles[x, y];
-                    var entities = EntityManager.GetComponent<Engine.Tile>(tile).Entities
-                        .ConvertAll<Entity>(entity => new Entity(entity, EntityManager.GetComponent<Render>(entity).Type))
-                        .ToArray();
-                    tiles[x, y] = new Tile("Dungeon", entities);
-                }
-            }
-            return tiles;
-        }
-
         public static int InitializePlayer()
         {
             var position = WorldService.GetFreeTile();
@@ -50,9 +32,15 @@ namespace SharpServer.Engine.Services
             var playerInfo = new PlayerInfo(id, position);
             ConnectionService.BroadcastToAll("new_player", playerInfo);
             Console.WriteLine(ConnectionService.DebugMessage("new_player", playerInfo));
-            ConnectionService.SendMessage("map", GetMap(id), id);
-            Console.WriteLine(ConnectionService.DebugMessage("map", PlayerService.GetMap(id)));
             return id;
+        }
+
+        public static void SendSurroundings(int id)
+        {
+            var player = playersToEntities[id];
+            var surroundings = WorldService.GetSurroundings(player, Player.VisionRange);
+            ConnectionService.SendMessage("map", surroundings, id);
+            Console.WriteLine(ConnectionService.DebugMessage("map", surroundings));
         }
 
         public static void MovePlayer(int id, string direction)
@@ -113,18 +101,6 @@ namespace SharpServer.Engine.Services
             return movement;
         }
 
-        public struct Entity
-        {
-            public int entity;
-            public string type;
-
-            public Entity(int entity, string type)
-            {
-                this.entity = entity;
-                this.type = type;
-            }
-        }
-
         public struct PlayerInfo
         {
             public int id;
@@ -134,16 +110,6 @@ namespace SharpServer.Engine.Services
             {
                 this.id = id;
                 this.position = position;
-            }
-        }
-        public struct Tile
-        {
-            public Entity[] entities;
-            public string floorType;
-            public Tile(string floorType, Entity[] entities)
-            {
-                this.floorType = floorType;
-                this.entities = entities;
             }
         }
     }
