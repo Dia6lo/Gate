@@ -13,6 +13,11 @@ namespace SharpServer.Engine
             Y = y;
         }
 
+        public Vector2 Clone()
+        {
+            return new Vector2(X, Y);
+        }
+
         public Vector2 Combine(Vector2 other)
         {
             return new Vector2(this.X + other.X, this.Y + other.Y);
@@ -29,12 +34,6 @@ namespace SharpServer.Engine
         {
             return Math.Abs(this.X - other.X) + Math.Abs(this.Y - other.Y);
         }
-
-        public Vector2 Clone()
-        {
-            return new Vector2(X, Y);
-        }
-
         public override string ToString()
         {
             return "(" + X + ", " + Y + ")";

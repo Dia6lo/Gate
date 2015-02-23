@@ -5,10 +5,31 @@ namespace SharpServer.Engine.Services
 {
     internal static class WorldService
     {
+        static public int[,] Tiles = new int[TilesX, TilesY];
         static public int TilesX = 20;
         static public int TilesY = 10;
-        static public int[,] Tiles = new int[TilesX, TilesY];
         static private Dictionary<int, Vector2> positions = new Dictionary<int, Vector2>(); //entity -> position
+
+        static public void AddEntity(Vector2 position, int entity)
+        {
+            positions[entity] = position;
+            var tile = EntityManager.GetComponent<Tile>(Tiles[position.X, position.Y]);
+            var volume = EntityManager.GetComponent<Shape>(entity).Volume;
+            tile.Entities.Add(entity);
+            tile.ContainingVolume += volume;
+        }
+
+        static public Vector2 GetFreeTile()
+        {
+            Random rand = new Random();
+            int x, y;
+            do
+            {
+                x = rand.Next(1, 19);
+                y = rand.Next(1, 9);
+            } while (EntityManager.GetComponent<Engine.Tile>(Tiles[x, y]).ContainingVolume > 50);
+            return new Vector2(x, y);
+        }
 
         public static void Initialize()
         {
@@ -25,26 +46,10 @@ namespace SharpServer.Engine.Services
                 }
             }
         }
-
-        static public Vector2 GetFreeTile()
+        static public void MoveEntity(int entity, Vector2 position)
         {
-            Random rand = new Random();
-            int x, y;
-            do
-            {
-                x = rand.Next(1, 19);
-                y = rand.Next(1, 9);
-            } while (EntityManager.GetComponent<Engine.Tile>(Tiles[x, y]).ContainingVolume > 50);
-            return new Vector2(x, y);
-        }
-
-        static public void AddEntity(Vector2 position, int entity)
-        {
-            positions[entity] = position;
-            var tile = EntityManager.GetComponent<Tile>(Tiles[position.X, position.Y]);
-            var volume = EntityManager.GetComponent<Shape>(entity).Volume;
-            tile.Entities.Add(entity);
-            tile.ContainingVolume += volume;
+            RemoveEntity(entity);
+            AddEntity(position, entity);
         }
 
         static public void RemoveEntity(int entity)
@@ -57,12 +62,6 @@ namespace SharpServer.Engine.Services
             entities.Remove(entity);
             var volume = EntityManager.GetComponent<Shape>(entity).Volume;
             EntityManager.GetComponent<Shape>(tile).Volume -= volume;
-        }
-
-        static public void MoveEntity(int entity, Vector2 position)
-        {
-            RemoveEntity(entity);
-            AddEntity(position, entity);
         }
     }
 }

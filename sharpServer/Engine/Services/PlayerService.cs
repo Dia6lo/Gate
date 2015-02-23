@@ -6,40 +6,34 @@ namespace SharpServer.Engine.Services
 {
     internal static class PlayerService
     {
-        private static Dictionary<int, int> playersToEntities = new Dictionary<int, int>();
-
         private static int lowestUnassignedPlayerID = 1;
-
-        private static int GenerateNewPlayerID()
+        private static Dictionary<int, int> playersToEntities = new Dictionary<int, int>();
+        public static void DestroyPlayer(int id)
         {
-            //TODO: Make it synchronous
-            {
-                if (lowestUnassignedPlayerID < int.MaxValue)
-                {
-                    return lowestUnassignedPlayerID++;
-                }
-                else
-                {
-                    for (var i = 1; i < int.MaxValue; i++)
-                    {
-                        if (!playersToEntities.ContainsKey(i))
-                            return i;
-                    }
-                    throw new IndexOutOfRangeException("ERROR: no available Player IDs; too many players(wow)!");
-                }
-            }
+            var player = playersToEntities[id];
+            var position = EntityManager.GetComponent<Transform>(player).Position;
+            WorldService.RemoveEntity(player);
+            EntityManager.DestroyEntity(player);
+            playersToEntities.Remove(id);
+            ConnectionService.BroadcastToAll("player_exit", new PlayerInfo(id, position));
         }
 
-        public struct PlayerInfo
+        public static Tile[,] GetMap(int id)
         {
-            public int id;
-            public Vector2 position;
-
-            public PlayerInfo(int id, Vector2 position)
+            var player = playersToEntities[id];
+            var tiles = new Tile[WorldService.TilesX, WorldService.TilesY];
+            for (var x = 0; x < WorldService.TilesX; x++)
             {
-                this.id = id;
-                this.position = position;
+                for (var y = 0; y < WorldService.TilesY; y++)
+                {
+                    var tile = WorldService.Tiles[x, y];
+                    var entities = EntityManager.GetComponent<Engine.Tile>(tile).Entities
+                        .ConvertAll<Entity>(entity => new Entity(entity, EntityManager.GetComponent<Render>(entity).Type))
+                        .ToArray();
+                    tiles[x, y] = new Tile("Dungeon", entities);
+                }
             }
+            return tiles;
         }
 
         public static int InitializePlayer()
@@ -61,16 +55,6 @@ namespace SharpServer.Engine.Services
             return id;
         }
 
-        public static void DestroyPlayer(int id)
-        {
-            var player = playersToEntities[id];
-            var position = EntityManager.GetComponent<Transform>(player).Position;
-            WorldService.RemoveEntity(player);
-            EntityManager.DestroyEntity(player);
-            playersToEntities.Remove(id);
-            ConnectionService.BroadcastToAll("player_exit", new PlayerInfo(id, position));
-        }
-
         public static void MovePlayer(int id, string direction)
         {
             int player;
@@ -82,6 +66,26 @@ namespace SharpServer.Engine.Services
             if (MovementService.MoveEntity(player, destination))
             {
                 ConnectionService.BroadcastToAll("map_update", new PlayerInfo(player, destination));
+            }
+        }
+
+        private static int GenerateNewPlayerID()
+        {
+            //TODO: Make it synchronous
+            {
+                if (lowestUnassignedPlayerID < int.MaxValue)
+                {
+                    return lowestUnassignedPlayerID++;
+                }
+                else
+                {
+                    for (var i = 1; i < int.MaxValue; i++)
+                    {
+                        if (!playersToEntities.ContainsKey(i))
+                            return i;
+                    }
+                    throw new IndexOutOfRangeException("ERROR: no available Player IDs; too many players(wow)!");
+                }
             }
         }
 
@@ -121,34 +125,26 @@ namespace SharpServer.Engine.Services
             }
         }
 
+        public struct PlayerInfo
+        {
+            public int id;
+            public Vector2 position;
+
+            public PlayerInfo(int id, Vector2 position)
+            {
+                this.id = id;
+                this.position = position;
+            }
+        }
         public struct Tile
         {
-            public string floorType;
             public Entity[] entities;
-
+            public string floorType;
             public Tile(string floorType, Entity[] entities)
             {
                 this.floorType = floorType;
                 this.entities = entities;
             }
-        }
-
-        public static Tile[,] GetMap(int id)
-        {
-            var player = playersToEntities[id];
-            var tiles = new Tile[WorldService.TilesX, WorldService.TilesY];
-            for (var x = 0; x < WorldService.TilesX; x++)
-            {
-                for (var y = 0; y < WorldService.TilesY; y++)
-                {
-                    var tile = WorldService.Tiles[x, y];
-                    var entities = EntityManager.GetComponent<Engine.Tile>(tile).Entities
-                        .ConvertAll<Entity>(entity => new Entity(entity, EntityManager.GetComponent<Render>(entity).Type))
-                        .ToArray();
-                    tiles[x, y] = new Tile("Dungeon", entities);
-                }
-            }
-            return tiles;
         }
     }
 }

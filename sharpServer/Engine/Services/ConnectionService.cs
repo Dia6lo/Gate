@@ -11,13 +11,6 @@ namespace SharpServer.Engine.Services
 
         private static WebSocketServer server = new WebSocketServer("ws://127.0.0.1:8080");
 
-        static public void Start()
-        {
-            server.Start(socket => socket.OnOpen = () => OnPlayerConnect(socket));
-            Console.WriteLine("Server started on 8080");
-            Console.ReadKey();
-        }
-
         public static void BroadcastToAll(string header, object body)
         {
             var message = CreateMessage(header, body);
@@ -32,14 +25,59 @@ namespace SharpServer.Engine.Services
                 playersToSockets[player].Send(message);
         }
 
+        public static string DebugMessage(string header, object obj)
+        {
+            return CreateMessage(header, obj);
+        }
+
+        static public void SendMessage(string header, object body, int player)
+        {
+            var message = CreateMessage(header, body);
+            playersToSockets[player].Send(message);
+        }
+
+        static public void Start()
+        {
+            server.Start(socket => socket.OnOpen = () => OnPlayerConnect(socket));
+            Console.WriteLine("Server started on 8080");
+            Console.ReadKey();
+        }
         private static string CreateMessage(string header, object obj)
         {
             return JsonConvert.SerializeObject(new Message(header, JsonConvert.SerializeObject(obj)));
         }
-
-        public static string DebugMessage(string header, object obj)
+        static private void HandleMessage(string message, int id)
         {
-            return CreateMessage(header, obj);
+            var unpackedMessage = JsonConvert.DeserializeObject<Message>(message);
+            var header = unpackedMessage.Header;
+            switch (header)
+            {
+                case "move":
+                    var body = JsonConvert.DeserializeObject<Direction>(unpackedMessage.Body);
+                    OnPlayerMove(body.direction, id);
+                    break;
+            }
+        }
+
+        private static void OnPlayerConnect(IWebSocketConnection socket)
+        {
+            var id = PlayerService.InitializePlayer();
+            playersToSockets[id] = socket;
+            Console.WriteLine("connected player " + id);
+            socket.OnClose = () => OnPlayerDisconnect(id);
+            socket.OnMessage = message => HandleMessage(message, id);
+        }
+
+        static private void OnPlayerDisconnect(int id)
+        {
+            PlayerService.DestroyPlayer(id);
+            playersToSockets.Remove(id);
+            Console.WriteLine("disconnected player " + id);
+        }
+
+        static private void OnPlayerMove(string direction, int playerID)
+        {
+            PlayerService.MovePlayer(playerID, direction);
         }
 
         public struct Direction
@@ -51,45 +89,6 @@ namespace SharpServer.Engine.Services
                 this.direction = direction;
             }
         }
-
-        static private void HandleMessage(string message, int id)
-        {
-            var unpackedMessage = JsonConvert.DeserializeObject<Message>(message);
-            var header = unpackedMessage.Header;
-            switch (header)
-            {
-                case "move": 
-                    var body = JsonConvert.DeserializeObject<Direction>(unpackedMessage.Body);
-                    OnPlayerMove(body.direction, id); 
-                    break;
-            }
-        }
-
-        static public void SendMessage(string header, object body, int player)
-        {
-            var message = CreateMessage(header, body);
-            playersToSockets[player].Send(message);
-        }
-
-        private static void OnPlayerConnect(IWebSocketConnection socket)
-        {
-            var playerID = PlayerService.InitializePlayer();
-            Console.WriteLine("connected player " + playerID);
-            socket.OnClose = () => OnPlayerDisconnect(playerID);
-            socket.OnMessage = message => HandleMessage(message, playerID);
-        }
-
-        static private void OnPlayerDisconnect(int id)
-        {
-            Console.WriteLine("disconnected player " + id);
-            PlayerService.DestroyPlayer(id);
-        }
-
-        static private void OnPlayerMove(string direction, int playerID)
-        {
-            PlayerService.MovePlayer(playerID, direction);
-        }
-
         private struct Message
         {
             public string Body;

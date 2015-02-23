@@ -4,22 +4,24 @@ using System.Linq;
 
 namespace SharpServer.Engine
 {
+    using ComponentStore = Dictionary<int, Component>;
+
     // SUGGESTION: Transform it to service?
     // TODO: make it use data from DB
     internal static class EntityManager
     {
-        private static Dictionary<string, Dictionary<int, Component>> componentStore = new Dictionary<string, Dictionary<int, Component>>();
+        private static Dictionary<string, ComponentStore> componentDB = new Dictionary<string, ComponentStore>();
         private static Dictionary<int, string> entityHumanReadableNames = new Dictionary<int, string>();
         private static List<int> entityStore = new List<int>();
         private static int lowestUnassignedEntityID = 1;
 
         public static void AddComponent<T>(int entity, T component) where T : Component
         {
-            Dictionary<int, Component> store;
-            if (!componentStore.TryGetValue(typeof(T).Name, out store))
+            ComponentStore store;
+            if (!componentDB.TryGetValue(typeof(T).Name, out store))
             {
-                store = new Dictionary<int, Component>();
-                componentStore[typeof(T).Name] = store;
+                store = new ComponentStore();
+                componentDB[typeof(T).Name] = store;
             }
             store[entity] = component;
         }
@@ -59,15 +61,15 @@ namespace SharpServer.Engine
             if (!entityStore.Contains(entity))
                 return;
             entityStore.Remove(entity);
-            foreach (var componentType in componentStore)
+            foreach (var componentType in componentDB)
             {
-                componentStore[componentType.Key].Remove(entity);
+                componentDB[componentType.Key].Remove(entity);
             }
         }
 
         public static T[] GetAllComponentsOfType<T>() where T : Component
         {
-            return componentStore[typeof(T).Name]
+            return componentDB[typeof(T).Name]
                 .Values
                 .Cast<T>()
                 .ToArray();
@@ -77,25 +79,25 @@ namespace SharpServer.Engine
         public static T[] GetAllComponentsOnEntity<T>(int entity) where T : Component
         {
             var components = new List<T>();
-            foreach (var componentType in componentStore)
+            foreach (var componentType in componentDB)
             {
-                if (componentStore[componentType.Key].ContainsKey(entity))
-                    components.Add((T)componentStore[componentType.Key][entity]);
+                if (componentDB[componentType.Key].ContainsKey(entity))
+                    components.Add((T)componentDB[componentType.Key][entity]);
             }
             return components.ToArray();
         }
 
         public static int[] GetAllEntitiesPossessingComponent<T>() where T : Component
         {
-            return componentStore[typeof(T).Name]
+            return componentDB[typeof(T).Name]
                 .Keys
                 .ToArray();
         }
 
         public static T GetComponent<T>(int entity) where T : Component
         {
-            Dictionary<int, Component> store;
-            if (!componentStore.TryGetValue(typeof(T).Name, out store))
+            ComponentStore store;
+            if (!componentDB.TryGetValue(typeof(T).Name, out store))
                 throw new KeyNotFoundException("GET FAIL: there are no entities with a Component of class: " + typeof(T).Name);
             if (!store.ContainsKey(entity))
                 throw new KeyNotFoundException("GET FAIL: " + NameFor(entity) + "(ID: " + entity + ") does not possess Component: " + typeof(T).Name);
@@ -104,8 +106,8 @@ namespace SharpServer.Engine
 
         public static bool HasComponent<T>(int entity) where T : Component
         {
-            Dictionary<int, Component> store;
-            if (componentStore.TryGetValue(typeof(T).Name, out store))
+            ComponentStore store;
+            if (componentDB.TryGetValue(typeof(T).Name, out store))
                 return store.ContainsKey(entity);
             return false;
         }
@@ -119,8 +121,8 @@ namespace SharpServer.Engine
 
         public static void RemoveComponent<T>(int entity) where T : Component
         {
-            Dictionary<int, Component> store;
-            if (componentStore.TryGetValue(typeof(T).Name, out store))
+            ComponentStore store;
+            if (componentDB.TryGetValue(typeof(T).Name, out store))
                 store.Remove(entity);
         }
 
