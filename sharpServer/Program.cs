@@ -2,15 +2,16 @@
 using System;
 using System.Collections.Generic;
 using SharpServer.Engine;
+using System.Linq;
+using SharpServer.Engine.Services;
 namespace SharpServer
 {
     internal class Program
     {
         private static void Main(string[] args)
         {
-            var em = new EntityManager();
-            var sm = new SystemManager(em);
-            Console.ReadKey();
+            WorldService.Initialize();
+            ConnectionService.Start();
         }
     }
 }

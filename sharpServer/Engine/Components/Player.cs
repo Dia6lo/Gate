@@ -2,12 +2,12 @@
 {
     internal class Player : Component
     {
-        public static int visionRange = 5;
-        public string name;
+        public static int VisionRange = 5;
+        public string Name;
 
         public Player(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 }

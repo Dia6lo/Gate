@@ -1,13 +1,104 @@
-﻿using System;
+﻿using Fleck;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharpServer.Engine.Services
 {
-    class ConnectionService: Service
+    internal static class ConnectionService
     {
+        private static Dictionary<int, IWebSocketConnection> playersToSockets = new Dictionary<int, IWebSocketConnection>();
 
+        private static WebSocketServer server = new WebSocketServer("ws://127.0.0.1:8080");
+
+        static public void Start()
+        {
+            server.Start(socket => socket.OnOpen = () => OnPlayerConnect(socket));
+            Console.WriteLine("Server started on 8080");
+            Console.ReadKey();
+        }
+
+        public static void BroadcastToAll(string header, object body)
+        {
+            var message = CreateMessage(header, body);
+            foreach (var player in playersToSockets)
+                player.Value.Send(message);
+        }
+
+        public static void BroadcastToPlayers(string header, object body, int[] players)
+        {
+            var message = CreateMessage(header, body);
+            foreach (var player in players)
+                playersToSockets[player].Send(message);
+        }
+
+        private static string CreateMessage(string header, object obj)
+        {
+            return JsonConvert.SerializeObject(new Message(header, JsonConvert.SerializeObject(obj)));
+        }
+
+        public static string DebugMessage(string header, object obj)
+        {
+            return CreateMessage(header, obj);
+        }
+
+        public struct Direction
+        {
+            public string direction;
+
+            public Direction(string direction)
+            {
+                this.direction = direction;
+            }
+        }
+
+        static private void HandleMessage(string message, int id)
+        {
+            var unpackedMessage = JsonConvert.DeserializeObject<Message>(message);
+            var header = unpackedMessage.Header;
+            switch (header)
+            {
+                case "move": 
+                    var body = JsonConvert.DeserializeObject<Direction>(unpackedMessage.Body);
+                    OnPlayerMove(body.direction, id); 
+                    break;
+            }
+        }
+
+        static public void SendMessage(string header, object body, int player)
+        {
+            var message = CreateMessage(header, body);
+            playersToSockets[player].Send(message);
+        }
+
+        private static void OnPlayerConnect(IWebSocketConnection socket)
+        {
+            var playerID = PlayerService.InitializePlayer();
+            Console.WriteLine("connected player " + playerID);
+            socket.OnClose = () => OnPlayerDisconnect(playerID);
+            socket.OnMessage = message => HandleMessage(message, playerID);
+        }
+
+        static private void OnPlayerDisconnect(int id)
+        {
+            Console.WriteLine("disconnected player " + id);
+            PlayerService.DestroyPlayer(id);
+        }
+
+        static private void OnPlayerMove(string direction, int playerID)
+        {
+            PlayerService.MovePlayer(playerID, direction);
+        }
+
+        private struct Message
+        {
+            public string Body;
+            public string Header;
+            public Message(string header, string body)
+            {
+                Header = header;
+                Body = body;
+            }
+        }
     }
 }

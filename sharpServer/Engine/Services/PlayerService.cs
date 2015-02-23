@@ -1,48 +1,16 @@
-﻿using Fleck;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-// WARNING: THIS US BULLSHIT
+// WARNING: No more BIG BULLSHIT, but still shit
 namespace SharpServer.Engine.Services
 {
-    internal class PlayerService: Service
+    internal static class PlayerService
     {
-        private struct Message
-        {
-            public string header;
-            public string body;
+        private static Dictionary<int, int> playersToEntities = new Dictionary<int, int>();
 
-            public Message(string header, string body)
-            {
-                this.header = header;
-                this.body = body;
-            }
-        }
+        private static int lowestUnassignedPlayerID = 1;
 
-        private Dictionary<int, int> playersToEntities;
-        private Dictionary<int, IWebSocketConnection> playersToSockets;
-
-        private int lowestUnassignedPlayerID;
-        private EntityManager entityManager;
-        private WorldService worldSystem;
-        private MovementService movementSystem;
-        private WebSocketServer server;
-
-        public PlayerService(EntityManager entityManager, WorldService worldSystem, MovementService movementSystem)
-        {
-            this.entityManager = entityManager;
-            this.worldSystem = worldSystem;
-            this.movementSystem = movementSystem;
-            playersToEntities = new Dictionary<int, int>();
-            playersToSockets = new Dictionary<int, IWebSocketConnection>();
-            server = new WebSocketServer("ws://127.0.0.1:8080");
-            lowestUnassignedPlayerID = 1;
-            server.Start(socket => socket.OnOpen = () => onPlayerConnect(socket));
-            Console.WriteLine("Server started on 8080");
-        }
-
-        private int generateNewPlayerID()
+        private static int GenerateNewPlayerID()
         {
             //TODO: Make it synchronous
             {
@@ -62,24 +30,7 @@ namespace SharpServer.Engine.Services
             }
         }
 
-        private void broadcastToAll(string message)
-        {
-            foreach (var player in playersToSockets)
-                player.Value.Send(message);
-        }
-
-        private void broadcastToPlayers(string message, int[] players)
-        {
-            foreach (var player in players)
-                playersToSockets[player].Send(message);
-        }
-
-        private string createMessage(string header, object obj)
-        {
-            return JsonConvert.SerializeObject(new Message(header, JsonConvert.SerializeObject(obj)));
-        }
-
-        private struct PlayerInfo
+        public struct PlayerInfo
         {
             public int id;
             public Vector2 position;
@@ -91,124 +42,74 @@ namespace SharpServer.Engine.Services
             }
         }
 
-        private void onPlayerConnect(IWebSocketConnection socket)
+        public static int InitializePlayer()
         {
-            var playerInfo = initializePlayer();
-            var playerID = playerInfo.id;
-            Console.WriteLine("connected player " + playerID);
-            broadcastToAll(createMessage("new_player", playerInfo));
-            Console.WriteLine(createMessage("new_player", playerInfo));
-            socket.Send(createMessage("map", getMap(playerID)));
-            Console.WriteLine(createMessage("map", getMap(playerID)));
-            socket.OnClose = () => onPlayerDisconnect(playerID);
-            socket.OnMessage = message => handleMessage(message, playerID);
-        }
-
-        private void onPlayerDisconnect(int id)
-        {
-            Console.WriteLine("disconnected player " + id);
-            broadcastToAll(createMessage("player_exit", destroyPlayer(id)));
-        }
-
-        private struct Direction
-        {
-            public string direction;
-            public Direction(string direction)
-            {
-                this.direction = direction;
-            }
-        }
-
-        private void handleMessage(string message, int id)
-        {
-            var m = JsonConvert.DeserializeObject<Message>(message);
-            switch (m.header)
-            {
-                case "move": onPlayerMove(JsonConvert.DeserializeObject<Direction>(m.body).direction, id); break;
-            }
-        }
-
-        private void onPlayerMove(string direction, int playerID)
-        {
-            PlayerInfo update;
-            if (movePlayer(playerID, direction, out update))
-            {
-                broadcastToAll(createMessage("map_update", update));
-            }
-        }
-
-        private PlayerInfo initializePlayer()
-        {
-            Random rand = new Random();
-            int x, y;
-            do
-            {
-                x = rand.Next(1, 19);
-                y = rand.Next(1, 9);
-            } while ( entityManager.getComponent<Engine.Tile>(worldSystem.tiles[x, y]).containingVolume > 50);
-            var position = new Vector2(x, y);
-            var id = generateNewPlayerID();
+            var position = WorldService.GetFreeTile();
+            var id = GenerateNewPlayerID();
             if (id < 1)
             {
                 throw new ArgumentOutOfRangeException("WTF? PlayerID < 1");
             }
-            var player = Factories.PlayerFactory.newPlayer(entityManager, id, position);
+            var player = Factories.PlayerFactory.NewPlayer(id, position);
             playersToEntities[id] = player;
-            worldSystem.addEntity(new Vector2(x, y), player);
-            return new PlayerInfo(id, position);
+            WorldService.AddEntity(position, player);
+            var playerInfo = new PlayerInfo(id, position);
+            ConnectionService.BroadcastToAll("new_player", playerInfo);
+            Console.WriteLine(ConnectionService.DebugMessage("new_player", playerInfo));
+            ConnectionService.SendMessage("map", GetMap(id), id);
+            Console.WriteLine(ConnectionService.DebugMessage("map", PlayerService.GetMap(id)));
+            return id;
         }
 
-        private PlayerInfo destroyPlayer(int id)
+        public static void DestroyPlayer(int id)
         {
             var player = playersToEntities[id];
-            var position = entityManager.getComponent<Transform>(player).position;
-            worldSystem.removeEntity(player);
-            entityManager.destroyEntity(player);
+            var position = EntityManager.GetComponent<Transform>(player).Position;
+            WorldService.RemoveEntity(player);
+            EntityManager.DestroyEntity(player);
             playersToEntities.Remove(id);
-            return new PlayerInfo(id, position);
+            ConnectionService.BroadcastToAll("player_exit", new PlayerInfo(id, position));
         }
 
-        private bool movePlayer(int id, string direction, out PlayerInfo PI)
+        public static void MovePlayer(int id, string direction)
         {
-            PI = new PlayerInfo();
             int player;
             if (!playersToEntities.TryGetValue(id, out player))
-                return false;
-            var offset = getOffset(direction);
-            var position = entityManager.getComponent<Transform>(player).position;
-            var destination = position.combine(offset);
-            if (movementSystem.moveEntity(player, destination))
+                return;
+            var offset = GetOffset(direction);
+            var position = EntityManager.GetComponent<Transform>(player).Position;
+            var destination = position.Combine(offset);
+            if (MovementService.MoveEntity(player, destination))
             {
-                PI = new PlayerInfo(player, destination);
+                ConnectionService.BroadcastToAll("map_update", new PlayerInfo(player, destination));
             }
-            return false;
         }
 
-        private Vector2 getOffset(string direction)
+        private static Vector2 GetOffset(string direction)
         {
             var movement = new Vector2(0, 0);
             switch (direction)
             {
                 case ("left"):
-                    movement.x = -1;
+                    movement.X = -1;
                     break;
 
                 case ("up"):
-                    movement.y = -1;
+                    movement.Y = -1;
                     break;
 
                 case ("right"):
-                    movement.x = 1;
+                    movement.X = 1;
                     break;
 
                 case ("down"):
-                    movement.y = 1;
+                    movement.Y = 1;
                     break;
             }
             return movement;
         }
 
-        private struct Entity
+        public struct Entity
         {
             public int entity;
             public string type;
@@ -220,7 +121,7 @@ namespace SharpServer.Engine.Services
             }
         }
 
-        private struct Tile
+        public struct Tile
         {
             public string floorType;
             public Entity[] entities;
@@ -232,18 +133,17 @@ namespace SharpServer.Engine.Services
             }
         }
 
-        private Tile[,] getMap(int id)
+        public static Tile[,] GetMap(int id)
         {
-            var world = worldSystem;
             var player = playersToEntities[id];
-            var tiles = new Tile[world.tilesX, world.tilesY];
-            for (var x = 0; x < world.tilesX; x++)
+            var tiles = new Tile[WorldService.TilesX, WorldService.TilesY];
+            for (var x = 0; x < WorldService.TilesX; x++)
             {
-                for (var y = 0; y < world.tilesY; y++)
+                for (var y = 0; y < WorldService.TilesY; y++)
                 {
-                    var tile = world.tiles[x, y];
-                    var entities = entityManager.getComponent<Engine.Tile>(tile).entities
-                        .ConvertAll<Entity>(entity => new Entity(entity, entityManager.getComponent<Render>(entity).type))
+                    var tile = WorldService.Tiles[x, y];
+                    var entities = EntityManager.GetComponent<Engine.Tile>(tile).Entities
+                        .ConvertAll<Entity>(entity => new Entity(entity, EntityManager.GetComponent<Render>(entity).Type))
                         .ToArray();
                     tiles[x, y] = new Tile("Dungeon", entities);
                 }

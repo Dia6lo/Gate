@@ -8,11 +8,11 @@ namespace SharpServer.Engine.Factories
 {
     class TileFactory
     {
-        public static int newDungeon(EntityManager em, Vector2 position)
+        public static int NewDungeon(Vector2 position)
         {
-            var tile = em.createEntity("Tile on " + position.x + " " + position.y);
-            em.addComponent(tile, new Transform(position));
-            em.addComponent(tile, new Tile("Dungeon"));
+            var tile = EntityManager.CreateEntity("Tile on " + position.X + " " + position.Y);
+            EntityManager.AddComponent(tile, new Transform(position));
+            EntityManager.AddComponent(tile, new Tile("Dungeon"));
             return tile;
         }
     }

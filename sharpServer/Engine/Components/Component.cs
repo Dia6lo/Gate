@@ -1,6 +1,10 @@
-﻿namespace SharpServer.Engine
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace SharpServer.Engine
 {
-    internal interface Component
+    internal abstract class Component
     {
     }
 }

@@ -2,11 +2,11 @@
 {
     internal class Shape: Component
     {
-        public int volume;
+        public int Volume;
 
         public Shape(int volume)
         {
-            this.volume = volume;
+            Volume = volume;
         }
     }
 }

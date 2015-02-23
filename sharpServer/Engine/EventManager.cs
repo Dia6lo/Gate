@@ -8,21 +8,16 @@ namespace SharpServer.Engine
 {
     class EventManager
     {
-        List<int> eventQueue;
+        List<int> eventQueue = new List<int>();
 
-        Dictionary<string, Dictionary<int, Dictionary<string, int>>> subscriptions;
+        Dictionary<string, Dictionary<int, Dictionary<string, int>>> subscriptions = new Dictionary<string,Dictionary<int,Dictionary<string,int>>>();
 
-        public EventManager()
-        {
-            eventQueue = new List<int>();
-        }
-
-        public void eventDispatcher ()
+        public void EventDispatcher ()
         {
 
         }
 
-        public void eventHandler()
+        public void EventHandler()
         {
 
         }

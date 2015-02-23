@@ -2,13 +2,13 @@
 {
     internal class PlayerFactory
     {
-        public static int newPlayer(EntityManager em, int id, Vector2 position)
+        public static int NewPlayer(int id, Vector2 position)
         {
-            var player = em.createEntity("Player " + id);
-            em.addComponent(player, new Transform(position));
-            em.addComponent(player, new Player("Player " + id));
-            em.addComponent(player, new Render("Player"));
-            em.addComponent(player, new Shape(75));
+            var player = EntityManager.CreateEntity("Player " + id);
+            EntityManager.AddComponent(player, new Transform(position));
+            EntityManager.AddComponent(player, new Player("Player " + id));
+            EntityManager.AddComponent(player, new Render("Player"));
+            EntityManager.AddComponent(player, new Shape(75));
             return player;
         }
     }

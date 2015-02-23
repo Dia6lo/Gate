@@ -1,25 +1,16 @@
 ﻿namespace SharpServer.Engine.Services
 {
-    internal class MovementService: Service
+    internal static class MovementService
     {
-        private EntityManager entityManager;
-        private WorldService worldSystem;
-
-        public MovementService(EntityManager entityManager, WorldService worldSystem)
+        public static bool MoveEntity(int entity, Vector2 destination)
         {
-            this.entityManager = entityManager;
-            this.worldSystem = worldSystem;
-        }
-
-        public bool moveEntity(int entity, Vector2 destination)
-        {
-            var position = entityManager.getComponent<Transform>(entity).position;
-            var finishTile = worldSystem.tiles[destination.x, destination.y];
-            if (entityManager.getComponent<Tile>(finishTile).containingVolume + entityManager.getComponent<Shape>(entity).volume < Tile.maxVolume)
+            var position = EntityManager.GetComponent<Transform>(entity).Position;
+            var finishTile = WorldService.Tiles[destination.X, destination.Y];
+            if (EntityManager.GetComponent<Tile>(finishTile).ContainingVolume + EntityManager.GetComponent<Shape>(entity).Volume < Tile.MaxVolume)
             {
-                position.x = destination.x;
-                position.y = destination.y;
-                worldSystem.moveEntity(entity, position);
+                position.X = destination.X;
+                position.Y = destination.Y;
+                WorldService.MoveEntity(entity, position);
                 return true;
             }
             return false;

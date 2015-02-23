@@ -6,18 +6,9 @@ using System.Threading.Tasks;
 
 namespace SharpServer.Engine.Services
 {
-    class VisualisationService: Service
+    static class VisualisationService
     {
         // Entity -> players that see it
-        Dictionary<int, List<int>> nearbyEntities;
-        private EntityManager entityManager;
-
-        public VisualisationService (EntityManager em)
-        {
-            entityManager = em;
-            nearbyEntities = new Dictionary<int, List<int>>();
-        }
-
-        void a() { }
+        static Dictionary<int, List<int>> NearbyEntities = new Dictionary<int, List<int>>();
     }
 }
