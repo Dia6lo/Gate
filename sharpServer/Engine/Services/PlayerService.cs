@@ -14,7 +14,8 @@ namespace SharpServer.Engine.Services
         public static void DestroyPlayer(int id)
         {
             var player = PlayersToEntities[id];
-            WorldService.RemoveEntity(player);
+            var position = EntityManager.GetComponent<Transform>(player);
+            WorldService.RemoveEntity(player, position.Position);
             EntityManager.DestroyEntity(player);
             PlayersToEntities.Remove(id);
             BroadcastMapToAll();

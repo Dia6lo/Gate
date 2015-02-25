@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine.Factories
 {
-    internal class PlayerFactory
+    internal static class PlayerFactory
     {
         public static int NewPlayer(int id, Vector2 position)
         {

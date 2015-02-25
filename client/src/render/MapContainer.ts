@@ -9,7 +9,7 @@ class MapContainer extends PIXI.DisplayObjectContainer {
 
     constructor() {
         super();
-        this.zoom = 2;
+        this.zoom = 1;
         this.scale = new PIXI.Point(this.zoom, this.zoom);
         this.map = new Map();
         this.addChild(this.map);

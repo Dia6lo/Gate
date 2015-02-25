@@ -46,15 +46,15 @@ namespace SharpServer.Engine.Services
             }
         }
 
-        public static void MoveEntity(int entity, Vector2 position)
+        public static void MoveEntity(int entity, Vector2 startPosition, Vector2 finishPosition)
         {
-            RemoveEntity(entity);
-            AddEntity(position, entity);
+            RemoveEntity(entity, startPosition);
+            AddEntity(finishPosition, entity);
         }
 
-        public static void RemoveEntity(int entity)
+        public static void RemoveEntity(int entity, Vector2 position)
         {
-            var position = Positions[entity];
+            //var position = Positions[entity];
             var tile = Tiles[position.X, position.Y];
             var entities = EntityManager.GetComponent<Tile>(tile).Entities;
             if (!entities.Contains(entity))
@@ -62,7 +62,7 @@ namespace SharpServer.Engine.Services
                                                  "(ID: " + entity + ") in tile " + position.X + ":" + position.Y);
             entities.Remove(entity);
             var volume = EntityManager.GetComponent<Shape>(entity).Volume;
-            EntityManager.GetComponent<Shape>(tile).Volume -= volume;
+            EntityManager.GetComponent<Tile>(tile).ContainingVolume -= volume;
         }
 
         public static int TilesX = 20;

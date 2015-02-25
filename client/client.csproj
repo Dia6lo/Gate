@@ -20,13 +20,11 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="assets\dungeon.png" />
-    <Content Include="assets\skeleton.png" />
+    <Content Include="assets\undef.png" />
     <Content Include="assets\void.png" />
     <Content Include="index.html" />
-    <Content Include="assets\leftwall.png" />
     <Content Include="lib\pixi.dev.js" />
     <Content Include="lib\require.js" />
-    <Content Include="assets\rightwall.png" />
     <Content Include="assets\wall.png" />
     <Content Include="assets\warrior.png" />
     <Content Include="lib\stats.min.js" />

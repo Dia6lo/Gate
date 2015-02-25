@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine.Factories
 {
-    internal class WallFactory
+    internal static class WallFactory
     {
         public static int NewWall(Vector2 position)
         {

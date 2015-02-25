@@ -9,7 +9,7 @@ class Map extends PIXI.SpriteBatch {
         this.settings = {
             tilesX: 11,
             tilesY: 11,
-            tileSize: 16
+            tileSize: 32
         };
         this.initialize();
     }

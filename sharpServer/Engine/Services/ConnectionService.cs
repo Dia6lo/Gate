@@ -85,7 +85,7 @@ namespace SharpServer.Engine.Services
             PlayerService.MovePlayer(playerId, direction);
         }
 
-        public struct Direction
+        public class Direction
         {
             public string direction;
 
@@ -95,7 +95,7 @@ namespace SharpServer.Engine.Services
             }
         }
 
-        private struct Message
+        private class Message
         {
             public readonly string Body;
             public readonly string Header;

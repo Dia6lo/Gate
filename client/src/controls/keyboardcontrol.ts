@@ -63,7 +63,7 @@ class KeyboardControl {
     }
 
     static newPosition(direction) {
-        Client.socket.send(JSON.stringify({ Header: "move", Body: JSON.stringify(direction) }));
+        Client.socket.send(JSON.stringify({ Header: "move", Body: JSON.stringify({ direction: direction }) }));
     }
 }
 

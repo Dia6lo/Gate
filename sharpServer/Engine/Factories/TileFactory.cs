@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine.Factories
 {
-    internal class TileFactory
+    internal static class TileFactory
     {
         public static int NewDungeon(Vector2 position)
         {
