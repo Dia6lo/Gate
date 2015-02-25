@@ -56,13 +56,16 @@
     <Compile Include="Engine\Components\Tile.cs" />
     <Compile Include="Engine\Components\Transform.cs" />
     <Compile Include="Engine\EntityManager.cs" />
+    <Compile Include="Engine\EventManager.cs" />
     <Compile Include="Engine\Factories\PlayerFactory.cs" />
+    <Compile Include="Engine\Factories\TileFactory.cs" />
     <Compile Include="Engine\Factories\WallFactory.cs" />
     <Compile Include="Engine\Geometry\Vector2.cs" />
-    <Compile Include="Engine\SystemManager.cs" />
-    <Compile Include="Engine\Systems\MovementSystem.cs" />
-    <Compile Include="Engine\Systems\PlayerSystem.cs" />
-    <Compile Include="Engine\Systems\WorldSystem.cs" />
+    <Compile Include="Engine\Services\ConnectionService.cs" />
+    <Compile Include="Engine\Services\VisualisationService.cs" />
+    <Compile Include="Engine\Services\MovementService.cs" />
+    <Compile Include="Engine\Services\PlayerService.cs" />
+    <Compile Include="Engine\Services\WorldService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

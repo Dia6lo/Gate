@@ -2,11 +2,11 @@
 {
     internal class Render : Component
     {
-        public string type;
+        public string Type;
 
         public Render(string type)
         {
-            this.type = type;
+            Type = type;
         }
     }
 }

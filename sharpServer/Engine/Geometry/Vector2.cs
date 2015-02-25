@@ -4,40 +4,40 @@ namespace SharpServer.Engine
 {
     internal class Vector2
     {
-        public int x;
-        public int y;
+        public int X;
+        public int Y;
 
         public Vector2(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
-        public Vector2 combine(Vector2 other)
+        public Vector2 Clone()
         {
-            return new Vector2(this.x + other.x, this.y + other.y);
+            return new Vector2(X, Y);
         }
 
-        public double distance(Vector2 other)
+        public Vector2 Combine(Vector2 other)
         {
-            var dx = other.x - this.x;
-            var dy = other.y - this.y;
-            return Math.Sqrt((dx * dx) + (dy * dy));
+            return new Vector2(X + other.X, Y + other.Y);
         }
 
-        public int manhattan(Vector2 other)
+        public double Distance(Vector2 other)
         {
-            return Math.Abs(this.x - other.x) + Math.Abs(this.y - other.y);
+            var dx = other.X - X;
+            var dy = other.Y - Y;
+            return Math.Sqrt((dx*dx) + (dy*dy));
         }
 
-        public Vector2 clone()
+        public int Manhattan(Vector2 other)
         {
-            return new Vector2(x, y);
+            return Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
         }
 
-        public string toString()
+        public override string ToString()
         {
-            return "(" + x + ", " + y + ")";
+            return "(" + X + ", " + Y + ")";
         }
     }
 }

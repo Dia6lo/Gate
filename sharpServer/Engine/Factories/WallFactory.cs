@@ -1,13 +1,13 @@
 ﻿namespace SharpServer.Engine.Factories
 {
-    internal class WallFactory
+    internal static class WallFactory
     {
-        public static int newWall(EntityManager em, Vector2 position)
+        public static int NewWall(Vector2 position)
         {
-            var wall = em.createEntity("Wall");
-            em.addComponent(wall, new Transform(position));
-            em.addComponent(wall, new Render("Dungeon wall"));
-            em.addComponent(wall, new Shape(100));
+            var wall = EntityManager.CreateEntity("Wall");
+            EntityManager.AddComponent(wall, new Transform(position));
+            EntityManager.AddComponent(wall, new Render("Dungeon wall"));
+            EntityManager.AddComponent(wall, new Shape(100));
             return wall;
         }
     }
