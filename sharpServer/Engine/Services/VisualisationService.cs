@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SharpServer.Engine.Services
 {
-    static class VisualisationService
+    internal static class VisualisationService
     {
         // Entity -> players that see it
-        static Dictionary<int, List<int>> NearbyEntities = new Dictionary<int, List<int>>();
+        private static Dictionary<int, List<int>> _nearbyEntities = new Dictionary<int, List<int>>();
     }
 }

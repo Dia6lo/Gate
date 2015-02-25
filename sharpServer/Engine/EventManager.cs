@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SharpServer.Engine
 {
-    class EventManager
+    internal class EventManager
     {
-        List<int> eventQueue = new List<int>();
+        private List<int> _eventQueue = new List<int>();
 
-        Dictionary<string, Dictionary<int, Dictionary<string, int>>> subscriptions = new Dictionary<string,Dictionary<int,Dictionary<string,int>>>();
+        private Dictionary<string, Dictionary<int, Dictionary<string, int>>> _subscriptions =
+            new Dictionary<string, Dictionary<int, Dictionary<string, int>>>();
 
-        public void EventDispatcher ()
+        public void EventDispatcher()
         {
-
         }
 
         public void EventHandler()
         {
-
         }
     }
 }

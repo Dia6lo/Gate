@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine
 {
-    internal class Shape: Component
+    internal class Shape : Component
     {
         public int Volume;
 

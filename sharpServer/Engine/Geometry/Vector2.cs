@@ -20,20 +20,21 @@ namespace SharpServer.Engine
 
         public Vector2 Combine(Vector2 other)
         {
-            return new Vector2(this.X + other.X, this.Y + other.Y);
+            return new Vector2(X + other.X, Y + other.Y);
         }
 
         public double Distance(Vector2 other)
         {
-            var dx = other.X - this.X;
-            var dy = other.Y - this.Y;
-            return Math.Sqrt((dx * dx) + (dy * dy));
+            var dx = other.X - X;
+            var dy = other.Y - Y;
+            return Math.Sqrt((dx*dx) + (dy*dy));
         }
 
         public int Manhattan(Vector2 other)
         {
-            return Math.Abs(this.X - other.X) + Math.Abs(this.Y - other.Y);
+            return Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
         }
+
         public override string ToString()
         {
             return "(" + X + ", " + Y + ")";

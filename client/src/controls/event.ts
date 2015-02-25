@@ -1,8 +1,10 @@
 ﻿class Event {
     events;
+
     constructor() {
         this.events = {};
     }
+
     on(type, callback, context) {
 
         //If this.events doesn't have the event property, create an empty array
@@ -38,7 +40,7 @@
 
                 //Get the current callback function
                 var callback = callbacks[i][0];
-                var context;
+                var context: Event;
 
                 //Get the current context object, if it exists
                 if (callbacks[i][1] === undefined) {

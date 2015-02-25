@@ -6,7 +6,8 @@
         {
             var position = EntityManager.GetComponent<Transform>(entity).Position;
             var finishTile = WorldService.Tiles[destination.X, destination.Y];
-            if (EntityManager.GetComponent<Tile>(finishTile).ContainingVolume + EntityManager.GetComponent<Shape>(entity).Volume < Tile.MaxVolume)
+            if (EntityManager.GetComponent<Tile>(finishTile).ContainingVolume +
+                EntityManager.GetComponent<Shape>(entity).Volume < Tile.MaxVolume)
             {
                 position.X = destination.X;
                 position.Y = destination.Y;

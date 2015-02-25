@@ -9,6 +9,7 @@ class Key {
     onDown: Event;
     onUp: Event;
     keycode: number;
+
     constructor(keycode) {
         this.keycode = keycode;
         this.isDown = false;
@@ -43,6 +44,7 @@ class Key {
          */
         this.onUp = new Event();
     }
+
     processKeyDown(event) {
 
 

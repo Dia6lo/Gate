@@ -21,11 +21,11 @@
     <Content Include="app.css" />
     <Content Include="assets\dungeon.png" />
     <Content Include="assets\skeleton.png" />
+    <Content Include="assets\void.png" />
     <Content Include="index.html" />
     <Content Include="assets\leftwall.png" />
     <Content Include="lib\pixi.dev.js" />
     <Content Include="lib\require.js" />
-    <Content Include="lib\socket.io.js" />
     <Content Include="assets\rightwall.png" />
     <Content Include="assets\wall.png" />
     <Content Include="assets\warrior.png" />
@@ -34,20 +34,18 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="src\client.ts" />
-    <TypeScriptCompile Include="src\entity.ts" />
-    <TypeScriptCompile Include="src\event.ts" />
-    <TypeScriptCompile Include="src\group.ts" />
-    <TypeScriptCompile Include="src\key.ts" />
-    <TypeScriptCompile Include="src\keyboard.ts" />
-    <TypeScriptCompile Include="src\keyboardcontrol.ts" />
-    <TypeScriptCompile Include="src\map.ts" />
-    <TypeScriptCompile Include="src\tile.ts" />
-    <TypeScriptCompile Include="src\world.ts" />
+    <TypeScriptCompile Include="src\connection\client.ts" />
+    <TypeScriptCompile Include="src\controls\event.ts" />
+    <TypeScriptCompile Include="src\controls\key.ts" />
+    <TypeScriptCompile Include="src\controls\keyboard.ts" />
+    <TypeScriptCompile Include="src\controls\keyboardcontrol.ts" />
+    <TypeScriptCompile Include="src\render\Map.ts" />
+    <TypeScriptCompile Include="src\game.ts" />
+    <TypeScriptCompile Include="src\render\MapContainer.ts" />
+    <TypeScriptCompile Include="src\render\Stage.ts" />
+    <TypeScriptCompile Include="src\render\TilesetProvider.ts" />
     <TypeScriptCompile Include="typings\pixi.d.ts" />
     <TypeScriptCompile Include="typings\require.d.ts" />
-    <TypeScriptCompile Include="typings\socket.io.d.ts" />
-    <TypeScriptCompile Include="src\game.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
