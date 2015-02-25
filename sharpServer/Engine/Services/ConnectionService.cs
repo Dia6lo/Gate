@@ -10,7 +10,7 @@ namespace SharpServer.Engine.Services
         private static readonly Dictionary<int, IWebSocketConnection> PlayersToSockets =
             new Dictionary<int, IWebSocketConnection>();
 
-        private static readonly WebSocketServer Server = new WebSocketServer("ws://127.0.0.1:8080");
+        private static readonly WebSocketServer Server = new WebSocketServer("ws://0.0.0.0:8080");
 
         public static void BroadcastToAll(string header, object body)
         {
