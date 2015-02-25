@@ -1,13 +1,12 @@
-﻿/// <reference path="typings/require.d.ts" />
+﻿/// <reference path="typings/pixi.d.ts" />
+/// <reference path="typings/require.d.ts" />
+import Game = require("./src/game");
 
-import Game = require("src/game");
-
-var Intialize = function initializeCanvas() {
-    
+var intialize = () => {
     //Create a new game
     var game = new Game();
 };
 
 require([], () => {
-    Intialize();
+    intialize();
 });
