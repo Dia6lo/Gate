@@ -7,7 +7,7 @@ class Game {
     keyboard: KeyboardControl;
 
     constructor() {
-        //var assetsToLoader = ["assets/tilesets/dungeon.json"];
+        //var assetsToLoader = ["assets/tiles.json"];
         //var loader = new PIXI.AssetLoader(assetsToLoader, true);
 
         //Define the callback when the loader has finished

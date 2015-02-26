@@ -19,7 +19,7 @@ namespace SharpServer.Engine.Services
                 player.Value.Send(message);
         }
 
-        public static void BroadcastToPlayers(string header, object body, int[] players)
+        public static void BroadcastToPlayers(string header, object body, IEnumerable<int> players)
         {
             var message = CreateMessage(header, body);
             foreach (var player in players)
