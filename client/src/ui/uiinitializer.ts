@@ -1,4 +1,5 @@
 ﻿import Stage = require("./stage");
+import PerfomanceStats = require("./perfomancestats");
 
 class UiManager {
 
@@ -15,7 +16,7 @@ class UiManager {
 
         //Start loading the assets
         //loader.load();
-
+        PerfomanceStats.initialize();
         this.stage = new Stage();
         this.stage.update();
     }

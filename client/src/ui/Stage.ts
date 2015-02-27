@@ -1,4 +1,5 @@
 ﻿import UiContainer = require("./uicontainer");
+import PerfomanceStats = require("./perfomancestats");
 
 class Stage {
 
@@ -18,8 +19,10 @@ class Stage {
     }
 
     update() {
-        requestAnimationFrame(this.update.bind(this));
+        PerfomanceStats.stats.begin();
         this.renderer.render(this.stage);
+        PerfomanceStats.stats.end();
+        requestAnimationFrame(this.update.bind(this));
     }
 }
 

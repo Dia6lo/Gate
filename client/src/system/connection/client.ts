@@ -8,7 +8,7 @@ interface IMessage {
 }
 
 class Client {
-    private static socket = new WebSocket("ws://127.0.0.1:8080");
+    private static socket: WebSocket;
     private static connected = false;
     private static messageHandlers = new EventManager();
 
@@ -34,6 +34,7 @@ class Client {
     }
 
     static initialize() {
+        this.socket = new WebSocket("ws://127.0.0.1:8080");
         this.socket.onopen = ev => this.onOpen();
         this.socket.onmessage = evt => this.onMessage(evt);
     }
