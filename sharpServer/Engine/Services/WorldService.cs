@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using SharpServer.Engine.Factories;
 
 namespace SharpServer.Engine.Services
 {
     internal static class WorldService
     {
-        private static readonly Dictionary<int, Vector2> Positions = new Dictionary<int, Vector2>();
-            //entity -> position
 
         public static void AddEntity(Vector2 position, int entity)
         {
-            Positions[entity] = position;
             var tile = EntityManager.GetComponent<Tile>(Tiles[position.X, position.Y]);
             var volume = EntityManager.GetComponent<Shape>(entity).Volume;
             tile.Entities.Add(entity);
@@ -65,8 +61,8 @@ namespace SharpServer.Engine.Services
             EntityManager.GetComponent<Tile>(tile).ContainingVolume -= volume;
         }
 
-        public static int TilesX = 20;
-        public static int TilesY = 10;
-        public static int[,] Tiles = new int[TilesX, TilesY];
+        public const int TilesX = 20;
+        public const int TilesY = 10;
+        public static readonly int[,] Tiles = new int[TilesX, TilesY];
     }
 }

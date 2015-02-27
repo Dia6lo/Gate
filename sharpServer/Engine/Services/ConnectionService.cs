@@ -5,6 +5,10 @@ using Newtonsoft.Json;
 
 namespace SharpServer.Engine.Services
 {
+    class a
+    {
+        
+    }
     internal static class ConnectionService
     {
         private static readonly Dictionary<int, IWebSocketConnection> PlayersToSockets =

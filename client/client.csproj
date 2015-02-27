@@ -19,12 +19,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
-    <Content Include="assets\dungeon.png" />
-    <Content Include="assets\undef.png" />
-    <Content Include="assets\void.png" />
     <Content Include="index.html" />
-    <Content Include="assets\wall.png" />
-    <Content Include="assets\warrior.png" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -35,12 +30,14 @@
     <TypeScriptCompile Include="src\controls\keyboard.ts" />
     <TypeScriptCompile Include="src\controls\keyboardcontrol.ts" />
     <TypeScriptCompile Include="src\render\Map.ts" />
-    <TypeScriptCompile Include="src\game.ts" />
     <TypeScriptCompile Include="src\render\MapContainer.ts" />
     <TypeScriptCompile Include="src\render\Stage.ts" />
     <TypeScriptCompile Include="src\render\TilesetProvider.ts" />
+    <TypeScriptCompile Include="src\game.ts" />
+    <TypeScriptCompile Include="src\ui\PerfomanceStats.ts" />
     <TypeScriptCompile Include="typings\pixi.d.ts" />
     <TypeScriptCompile Include="typings\require.d.ts" />
+    <TypeScriptCompile Include="typings\stats.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
@@ -50,7 +47,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="src\ui\map\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>

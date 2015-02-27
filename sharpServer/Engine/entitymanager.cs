@@ -106,16 +106,12 @@ namespace SharpServer.Engine
         public static bool HasComponent<T>(int entity) where T : Component
         {
             ComponentStore store;
-            if (ComponentDb.TryGetValue(typeof (T).Name, out store))
-                return store.ContainsKey(entity);
-            return false;
+            return ComponentDb.TryGetValue(typeof (T).Name, out store) && store.ContainsKey(entity);
         }
 
         public static string NameFor(int entity)
         {
-            if (EntityHumanReadableNames.ContainsKey(entity))
-                return EntityHumanReadableNames[entity];
-            return "Not defined";
+            return EntityHumanReadableNames.ContainsKey(entity) ? EntityHumanReadableNames[entity] : "Not defined";
         }
 
         public static void RemoveComponent<T>(int entity) where T : Component

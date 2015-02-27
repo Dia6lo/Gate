@@ -1,37 +1,28 @@
 ﻿import Key = require("./key");
 
 class Keyboard {
-    keys;
-
-    onKeyDown(event) {
-        return this.processKeyDown(event);
-    }
-
-    onKeyUp(event) {
-        return this.processKeyUp(event);
-    }
+    keys: {[keycode: number]: Key} = {};
 
     constructor() {
-        this.keys = {};
-        window.addEventListener("keydown", this.onKeyDown.bind(this), false);
-        window.addEventListener("keyup", this.onKeyUp.bind(this), false);
+        window.addEventListener("keydown", this.processKeyDown.bind(this), false);
+        window.addEventListener("keyup", this.processKeyUp.bind(this), false);
     }
 
-    getKey(keycode) {
+    setupKey(keycode: number, callback: Function, context: Object) {
         if (this.keys[keycode] === undefined) {
-            this.keys[keycode] = new Key(keycode);
+            this.keys[keycode] = new Key();
         }
-        return this.keys[keycode];
+        this.keys[keycode].setup(callback, context);
     }
 
-    processKeyDown(event) {
+    processKeyDown(event: KeyboardEvent) {
         if (this.keys[event.keyCode] !== undefined) {
             event.preventDefault();
             this.keys[event.keyCode].processKeyDown(event);
         }
     }
 
-    processKeyUp(event) {
+    processKeyUp(event: KeyboardEvent) {
         if (this.keys[event.keyCode] !== undefined) {
             this.keys[event.keyCode].processKeyUp(event);
         }

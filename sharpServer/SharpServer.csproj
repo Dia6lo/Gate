@@ -62,7 +62,7 @@
     <Compile Include="Engine\Factories\WallFactory.cs" />
     <Compile Include="Engine\Geometry\Vector2.cs" />
     <Compile Include="Engine\Services\ConnectionService.cs" />
-    <Compile Include="Engine\Services\VisualisationService.cs" />
+    <Compile Include="Engine\Services\InformationService.cs" />
     <Compile Include="Engine\Services\MovementService.cs" />
     <Compile Include="Engine\Services\PlayerService.cs" />
     <Compile Include="Engine\Services\WorldService.cs" />

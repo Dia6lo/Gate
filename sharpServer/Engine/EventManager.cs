@@ -4,6 +4,7 @@ namespace SharpServer.Engine
 {
     internal class EventManager
     {
+        public delegate void Handler();
         private List<int> _eventQueue = new List<int>();
 
         private Dictionary<string, Dictionary<int, Dictionary<string, int>>> _subscriptions =

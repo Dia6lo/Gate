@@ -22,10 +22,10 @@ class Game {
         this.stage = new Stage();
         this.stage.update();
         var playerControls = {
-            "left": 65,
-            "right": 68,
-            "up": 87,
-            "down": 83
+            "up": "W",
+            "left": "A",
+            "down": "S",
+            "right": "D"
         };
         this.keyboard = new KeyboardControl(playerControls);
     }
