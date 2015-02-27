@@ -1,4 +1,4 @@
-﻿class Event {
+class EventManager {
 
     events: { [type: string]: { callback: Function; context: Object }[] } = {};
 
@@ -25,4 +25,4 @@
     }
 }
 
-export = Event;
+export = EventManager;

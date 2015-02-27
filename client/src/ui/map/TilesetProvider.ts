@@ -28,7 +28,7 @@
         return new PIXI.Sprite(sprite.texture);
     }
 
-    static init() {
+    static initialize() {
         TilesetProvider.initEntityToSprite();
         TilesetProvider.initTileToSprite();
     }

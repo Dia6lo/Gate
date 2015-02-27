@@ -24,17 +24,20 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="src\connection\client.ts" />
-    <TypeScriptCompile Include="src\controls\event.ts" />
-    <TypeScriptCompile Include="src\controls\key.ts" />
-    <TypeScriptCompile Include="src\controls\keyboard.ts" />
-    <TypeScriptCompile Include="src\controls\keyboardcontrol.ts" />
-    <TypeScriptCompile Include="src\render\Map.ts" />
-    <TypeScriptCompile Include="src\render\MapContainer.ts" />
-    <TypeScriptCompile Include="src\render\Stage.ts" />
-    <TypeScriptCompile Include="src\render\TilesetProvider.ts" />
+    <TypeScriptCompile Include="src\system\connection\client.ts" />
+    <TypeScriptCompile Include="src\system\controls\key.ts" />
+    <TypeScriptCompile Include="src\system\controls\keyboard.ts" />
+    <TypeScriptCompile Include="src\system\controls\keyboardcontrol.ts" />
+    <TypeScriptCompile Include="src\serviceprovider.ts" />
+    <TypeScriptCompile Include="src\system\systemminitializer.ts" />
+    <TypeScriptCompile Include="src\ui\map\Map.ts" />
+    <TypeScriptCompile Include="src\ui\Stage.ts" />
+    <TypeScriptCompile Include="src\ui\map\TilesetProvider.ts" />
     <TypeScriptCompile Include="src\game.ts" />
     <TypeScriptCompile Include="src\ui\PerfomanceStats.ts" />
+    <TypeScriptCompile Include="src\ui\uicontainer.ts" />
+    <TypeScriptCompile Include="src\ui\uiinitializer.ts" />
+    <TypeScriptCompile Include="src\utility\eventmanager.ts" />
     <TypeScriptCompile Include="typings\pixi.d.ts" />
     <TypeScriptCompile Include="typings\require.d.ts" />
     <TypeScriptCompile Include="typings\stats.d.ts" />
@@ -47,9 +50,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\ui\map\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>

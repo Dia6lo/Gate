@@ -1,11 +1,10 @@
 ﻿import Keyboard = require("./keyboard");
-import Client = require("../connection/client");
+import ServiceProvider = require("../../serviceprovider");
 
 class KeyboardControl {
-    static keyboard: Keyboard;
+    static keyboard = new Keyboard();
 
-    constructor(controls) {
-        KeyboardControl.keyboard = new Keyboard();
+    static initialize(controls) {
         for (var key in controls) {
             if (controls.hasOwnProperty(key)) {
                 switch (key) {
@@ -17,15 +16,16 @@ class KeyboardControl {
                 }
             }
         }
+        
     }
 
     static bindKey(action: string, keyChar: string){
         var keyCode = keyChar.charCodeAt(0);
-        KeyboardControl.keyboard.setupKey(keyCode, KeyboardControl.newPosition.bind(this, action), this);
+        this.keyboard.setupKey(keyCode, KeyboardControl.newPosition.bind(this, action), this);
     }
 
     static newPosition(direction) {
-        Client.socket.send(JSON.stringify({ Header: "move", Body: JSON.stringify({ direction: direction }) }));
+        ServiceProvider.Client.sendMessage("move", direction);
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿import TilesetProvider = require("./TilesetProvider");
+import ServiceProvider = require("../../serviceprovider");
 
 class Map extends PIXI.SpriteBatch {
 
@@ -6,6 +7,7 @@ class Map extends PIXI.SpriteBatch {
 
     constructor() {
         super();
+        TilesetProvider.initialize();
         this.settings = {
             tilesX: 11,
             tilesY: 11,
@@ -20,6 +22,8 @@ class Map extends PIXI.SpriteBatch {
                 this.addSprite(TilesetProvider.getTile("Undefined"), x, y);
             }
         }
+
+        ServiceProvider.Client.subscribe("map", this.update.bind(this), this);
     }
 
     update(map: any) {

@@ -1,12 +1,12 @@
-﻿import Ev = require("./event");
+﻿import EventManager = require("../../utility/eventmanager");
 
 class Key {
 
     isDown = false;
     lastDown = 0;
     delay = 50;
-    onDown = new Ev();
-    onUp = new Ev();
+    onDown = new EventManager();
+    onUp = new EventManager();
 
     setup(callback: Function, context: Object) {
         this.onDown.on("down", callback, context);

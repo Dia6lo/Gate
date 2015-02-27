@@ -4,7 +4,7 @@ import Game = require("./src/game");
 
 var intialize = () => {
     //Create a new game
-    var game = new Game();
+    Game.initialize();
 };
 
 require([], () => {

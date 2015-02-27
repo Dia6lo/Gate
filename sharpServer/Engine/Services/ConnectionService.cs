@@ -50,7 +50,7 @@ namespace SharpServer.Engine.Services
 
         private static string CreateMessage(string header, object body)
         {
-            var message = new Message(header, JsonConvert.SerializeObject(body));
+            var message = new Message(header, body);
             return JsonConvert.SerializeObject(message);
         }
 
@@ -61,8 +61,7 @@ namespace SharpServer.Engine.Services
             switch (header)
             {
                 case "move":
-                    var body = JsonConvert.DeserializeObject<Direction>(unpackedMessage.Body);
-                    OnPlayerMove(body.direction, id);
+                    OnPlayerMove((string)unpackedMessage.Body, id);
                     break;
             }
         }
@@ -89,22 +88,12 @@ namespace SharpServer.Engine.Services
             PlayerService.MovePlayer(playerId, direction);
         }
 
-        public class Direction
-        {
-            public string direction;
-
-            public Direction(string direction)
-            {
-                this.direction = direction;
-            }
-        }
-
         private class Message
         {
-            public readonly string Body;
             public readonly string Header;
+            public readonly object Body;
 
-            public Message(string header, string body)
+            public Message(string header, object body)
             {
                 Header = header;
                 Body = body;
