@@ -35,6 +35,7 @@
     <TypeScriptCompile Include="src\ui\map\TilesetProvider.ts" />
     <TypeScriptCompile Include="src\game.ts" />
     <TypeScriptCompile Include="src\ui\PerfomanceStats.ts" />
+    <TypeScriptCompile Include="src\ui\textlog.ts" />
     <TypeScriptCompile Include="src\ui\uicontainer.ts" />
     <TypeScriptCompile Include="src\ui\uiinitializer.ts" />
     <TypeScriptCompile Include="src\utility\eventmanager.ts" />

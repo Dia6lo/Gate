@@ -1,7 +1,7 @@
 ﻿import Stage = require("./stage");
 import PerfomanceStats = require("./perfomancestats");
 
-class UiManager {
+class UiInitializer {
 
     static stage: Stage;
 
@@ -22,4 +22,4 @@ class UiManager {
     }
 }
 
-export = UiManager; 
+export = UiInitializer; 

@@ -1,7 +1,7 @@
 ﻿import Client = require("./connection/client");
 import KeyboardControl = require("./controls/keyboardcontrol");
 
-class SystemManager {
+class SystemInitializer {
     static initialize() {
         Client.initialize();
         var playerControls = {
@@ -14,4 +14,4 @@ class SystemManager {
     }
 }
 
-export = SystemManager;
+export = SystemInitializer;

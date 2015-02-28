@@ -14,7 +14,7 @@ class UiContainer extends PIXI.DisplayObjectContainer {
 
     constructor() {
         super();
-        this.zoom = 1;
+        this.zoom = 2;
         this.map = new Map();
         this.addChild(this.map);
     }

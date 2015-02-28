@@ -2,7 +2,7 @@
 {
     internal static class InformationService
     {
-        public static Cell[,] GetSurroundings(int entity, int radius)
+        public static Cell[,] GetSurroundings(uint entity, int radius)
         {
             var size = radius * 2 + 1;
             var result = new Cell[size, size];
@@ -27,10 +27,10 @@
 
         public struct Entity
         {
-            public int Id;
+            public uint Id;
             public string Type;
 
-            public Entity(int id, string type)
+            public Entity(uint id, string type)
             {
                 Id = id;
                 Type = type;

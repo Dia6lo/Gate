@@ -2,10 +2,9 @@
 {
     internal static class WallFactory
     {
-        public static int NewWall(Vector2 position)
+        public static uint Create(Vector2 position)
         {
-            var wall = EntityManager.CreateEntity("Wall");
-            EntityManager.AddComponent(wall, new Transform(position));
+            var wall = EntityBaseFactory.Create(position, "Wall");
             EntityManager.AddComponent(wall, new Render("Dungeon wall"));
             EntityManager.AddComponent(wall, new Shape(100));
             return wall;

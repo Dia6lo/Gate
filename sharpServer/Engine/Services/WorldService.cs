@@ -6,7 +6,7 @@ namespace SharpServer.Engine.Services
     internal static class WorldService
     {
 
-        public static void AddEntity(Vector2 position, int entity)
+        public static void AddEntity(Vector2 position, uint entity)
         {
             var tile = EntityManager.GetComponent<Tile>(Tiles[position.X, position.Y]);
             var volume = EntityManager.GetComponent<Shape>(entity).Volume;
@@ -32,23 +32,23 @@ namespace SharpServer.Engine.Services
             {
                 for (var y = 0; y < TilesY; y++)
                 {
-                    Tiles[x, y] = TileFactory.NewDungeon(new Vector2(x, y));
+                    Tiles[x, y] = TileFactory.Create(new Vector2(x, y));
                     if ((y == 0) || (y == TilesY - 1) || (x == 0) || (x == TilesX - 1))
                     {
-                        var wall = WallFactory.NewWall(new Vector2(x, y));
+                        var wall = WallFactory.Create(new Vector2(x, y));
                         AddEntity(new Vector2(x, y), wall);
                     }
                 }
             }
         }
 
-        public static void MoveEntity(int entity, Vector2 startPosition, Vector2 finishPosition)
+        public static void MoveEntity(uint entity, Vector2 startPosition, Vector2 finishPosition)
         {
             RemoveEntity(entity, startPosition);
             AddEntity(finishPosition, entity);
         }
 
-        public static void RemoveEntity(int entity, Vector2 position)
+        public static void RemoveEntity(uint entity, Vector2 position)
         {
             //var position = Positions[entity];
             var tile = Tiles[position.X, position.Y];
@@ -63,6 +63,6 @@ namespace SharpServer.Engine.Services
 
         public const int TilesX = 20;
         public const int TilesY = 10;
-        public static readonly int[,] Tiles = new int[TilesX, TilesY];
+        public static readonly uint[,] Tiles = new uint[TilesX, TilesY];
     }
 }

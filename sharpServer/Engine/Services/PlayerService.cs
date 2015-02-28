@@ -9,7 +9,7 @@ namespace SharpServer.Engine.Services
     internal static class PlayerService
     {
         private static int _lowestUnassignedPlayerId = 1;
-        private static readonly Dictionary<int, int> PlayersToEntities = new Dictionary<int, int>();
+        private static readonly Dictionary<int, uint> PlayersToEntities = new Dictionary<int, uint>();
 
         public static void DestroyPlayer(int id)
         {
@@ -36,7 +36,7 @@ namespace SharpServer.Engine.Services
             {
                 throw new ArgumentOutOfRangeException("WTF? PlayerID < 1");
             }
-            var player = PlayerFactory.NewPlayer(id, position);
+            var player = PlayerFactory.Create(id, position);
             WorldService.AddEntity(position, player);
             BroadcastMapToAll();
             PlayersToEntities[id] = player;
@@ -53,7 +53,7 @@ namespace SharpServer.Engine.Services
 
         public static void MovePlayer(int id, string direction)
         {
-            int player;
+            uint player;
             if (!PlayersToEntities.TryGetValue(id, out player))
                 return;
             var offset = GetOffset(direction);

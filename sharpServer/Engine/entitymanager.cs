@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SharpServer.Engine
 {
-    using ComponentStore = Dictionary<int, Component>;
+    using ComponentStore = Dictionary<uint, Component>;
 
     // SUGGESTION: Transform it to service?
     // TODO: make it use data from DB
@@ -13,11 +13,11 @@ namespace SharpServer.Engine
         private static readonly Dictionary<string, ComponentStore> ComponentDb =
             new Dictionary<string, ComponentStore>();
 
-        private static readonly Dictionary<int, string> EntityHumanReadableNames = new Dictionary<int, string>();
-        private static readonly List<int> EntityStore = new List<int>();
-        private static int _lowestUnassignedEntityId = 1;
+        private static readonly Dictionary<uint, string> EntityHumanReadableNames = new Dictionary<uint, string>();
+        private static readonly List<uint> EntityStore = new List<uint>();
+        private static uint _lowestUnassignedEntityId = 1;
 
-        public static void AddComponent<T>(int entity, T component) where T : Component
+        public static void AddComponent<T>(uint entity, T component) where T : Component
         {
             ComponentStore store;
             if (!ComponentDb.TryGetValue(typeof (T).Name, out store))
@@ -28,7 +28,7 @@ namespace SharpServer.Engine
             store[entity] = component;
         }
 
-        public static void AddComponents(int entity, params Component[] components)
+        public static void AddComponents(uint entity, params Component[] components)
         {
             foreach (var component in components)
             {
@@ -36,26 +36,22 @@ namespace SharpServer.Engine
             }
         }
 
-        public static int CreateEntity(string name = "No description")
+        public static uint CreateEntity(string name = "No description")
         {
             var entity = GenerateNewEntityId();
-            if (entity < 1)
-            {
-                throw new ArgumentOutOfRangeException("WTF? Entity < 1");
-            }
             EntityStore.Add(entity);
             EntityHumanReadableNames[entity] = name;
             return entity;
         }
 
-        public static void DestroyEntities(params int[] entities)
+        public static void DestroyEntities(params uint[] entities)
         {
             foreach (var entity in entities)
                 DestroyEntity(entity);
         }
 
         // TODO: Make it synchronous
-        public static void DestroyEntity(int entity)
+        public static void DestroyEntity(uint entity)
         {
             if (!EntityStore.Contains(entity))
                 return;
@@ -75,7 +71,7 @@ namespace SharpServer.Engine
         }
 
         // WARNING: Use only for debug reasons (slow as fuck)
-        public static T[] GetAllComponentsOnEntity<T>(int entity) where T : Component
+        public static T[] GetAllComponentsOnEntity<T>(uint entity) where T : Component
         {
             return ComponentDb
                 .Where(componentType => componentType.Value.ContainsKey(entity))
@@ -84,14 +80,14 @@ namespace SharpServer.Engine
                 .ToArray();
         }
 
-        public static int[] GetAllEntitiesPossessingComponent<T>() where T : Component
+        public static uint[] GetAllEntitiesPossessingComponent<T>() where T : Component
         {
             return ComponentDb[typeof (T).Name]
                 .Keys
                 .ToArray();
         }
 
-        public static T GetComponent<T>(int entity) where T : Component
+        public static T GetComponent<T>(uint entity) where T : Component
         {
             ComponentStore store;
             if (!ComponentDb.TryGetValue(typeof (T).Name, out store))
@@ -103,38 +99,38 @@ namespace SharpServer.Engine
             return (T) store[entity];
         }
 
-        public static bool HasComponent<T>(int entity) where T : Component
+        public static bool HasComponent<T>(uint entity) where T : Component
         {
             ComponentStore store;
             return ComponentDb.TryGetValue(typeof (T).Name, out store) && store.ContainsKey(entity);
         }
 
-        public static string NameFor(int entity)
+        public static string NameFor(uint entity)
         {
             return EntityHumanReadableNames.ContainsKey(entity) ? EntityHumanReadableNames[entity] : "Not defined";
         }
 
-        public static void RemoveComponent<T>(int entity) where T : Component
+        public static void RemoveComponent<T>(uint entity) where T : Component
         {
             ComponentStore store;
             if (ComponentDb.TryGetValue(typeof (T).Name, out store))
                 store.Remove(entity);
         }
 
-        public static void SetEntityName(int entity, string name)
+        public static void SetEntityName(uint entity, string name)
         {
             EntityHumanReadableNames[entity] = name;
         }
 
         // SUGGESTION: Think about better implementation
         // TODO: Make it synchronous
-        private static int GenerateNewEntityId()
+        private static uint GenerateNewEntityId()
         {
             if (_lowestUnassignedEntityId < int.MaxValue)
             {
                 return _lowestUnassignedEntityId++;
             }
-            for (var i = 1; i < int.MaxValue; i++)
+            for (uint i = 1; i < int.MaxValue; i++)
             {
                 if (!EntityStore.Contains(i))
                     return i;

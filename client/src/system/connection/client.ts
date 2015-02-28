@@ -12,7 +12,7 @@ class Client {
     private static connected = false;
     private static messageHandlers = new EventManager();
 
-    static onOpen() {
+    static onOpen(evt: any) {
         Client.connected = true;
     }
 
@@ -35,7 +35,7 @@ class Client {
 
     static initialize() {
         this.socket = new WebSocket("ws://127.0.0.1:8080");
-        this.socket.onopen = ev => this.onOpen();
+        this.socket.onopen = evt => this.onOpen(evt);
         this.socket.onmessage = evt => this.onMessage(evt);
     }
 }

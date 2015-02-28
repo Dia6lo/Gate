@@ -6,7 +6,7 @@ namespace SharpServer.Engine
     {
         public static int MaxVolume = 100;
         public int ContainingVolume = 0;
-        public List<int> Entities = new List<int>();
+        public List<uint> Entities = new List<uint>();
         public string FloorType;
 
         public Tile(string floorType)

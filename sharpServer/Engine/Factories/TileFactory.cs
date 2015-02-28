@@ -2,10 +2,9 @@
 {
     internal static class TileFactory
     {
-        public static int NewDungeon(Vector2 position)
+        public static uint Create(Vector2 position)
         {
-            var tile = EntityManager.CreateEntity("Tile on " + position.X + " " + position.Y);
-            EntityManager.AddComponent(tile, new Transform(position));
+            var tile = EntityBaseFactory.Create(position, "Tile on " + position.X + " " + position.Y);
             EntityManager.AddComponent(tile, new Tile("Dungeon"));
             return tile;
         }

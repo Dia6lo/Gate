@@ -2,13 +2,13 @@
 {
     internal static class PlayerFactory
     {
-        public static int NewPlayer(int id, Vector2 position)
+        public static uint Create(int id, Vector2 position)
         {
-            var player = EntityManager.CreateEntity("Player " + id);
-            EntityManager.AddComponent(player, new Transform(position));
+            var player = EntityBaseFactory.Create(position, "Player " + id);
             EntityManager.AddComponent(player, new Player("Player " + id));
             EntityManager.AddComponent(player, new Render("Player"));
             EntityManager.AddComponent(player, new Shape(75));
+            EntityManager.AddComponent(player, new Health(100));
             return player;
         }
     }
