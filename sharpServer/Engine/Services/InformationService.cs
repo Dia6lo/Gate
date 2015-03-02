@@ -1,4 +1,6 @@
-﻿namespace SharpServer.Engine.Services
+﻿using System.Linq;
+
+namespace SharpServer.Engine.Services
 {
     internal static class InformationService
     {
@@ -20,21 +22,29 @@
                 return new Cell("Void", new Entity[0]);
             var tile = EntityManager.GetComponent<Tile>(WorldService.Tiles[position.X, position.Y]);
             var entities = tile.Entities
-                .ConvertAll(id => new Entity(id, EntityManager.GetComponent<Render>(id).Type))
+                .Select(EntityManager.GetComponent<Render>)
+                .ToList()
+                .ConvertAll(render => new Entity(render.Sprite, render.HaveDescription, render.Name, render.Type, render.Description))
                 .ToArray();
             return new Cell(tile.FloorType, entities);
         }
 
         public struct Entity
         {
-            public uint Id;
-            public string Type;
+            public string Sprite;
+        public bool HaveDescription;
+        public string Name;
+        public string Type;
+        public string Description;
 
-            public Entity(uint id, string type)
-            {
-                Id = id;
-                Type = type;
-            }
+        public Entity(string sprite, bool haveDescription, string name = "", string type = "", string description = "")
+        {
+            Sprite = sprite;
+            HaveDescription = haveDescription;
+            Name = name;
+            Type = type;
+            Description = description;
+        }
         }
 
         public struct Cell

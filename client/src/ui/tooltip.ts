@@ -28,7 +28,6 @@
             }
         );
     private static instance: PIXI.DisplayObjectContainer = null;
-    static inTile = false;
 
     static get container() {
         if (this.instance == null) {
