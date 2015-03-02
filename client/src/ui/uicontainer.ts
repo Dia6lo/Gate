@@ -1,4 +1,5 @@
 ﻿import Map = require("./map/Map");
+import ServiceProvider = require("../serviceprovider");
 
 class UiContainer extends PIXI.DisplayObjectContainer {
     private map: Map;

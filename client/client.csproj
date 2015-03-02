@@ -31,8 +31,10 @@
     <TypeScriptCompile Include="src\serviceprovider.ts" />
     <TypeScriptCompile Include="src\system\systemminitializer.ts" />
     <TypeScriptCompile Include="src\ui\map\Map.ts" />
+    <TypeScriptCompile Include="src\ui\map\tile.ts" />
+    <TypeScriptCompile Include="src\ui\tooltip.ts" />
     <TypeScriptCompile Include="src\ui\Stage.ts" />
-    <TypeScriptCompile Include="src\ui\map\TilesetProvider.ts" />
+    <TypeScriptCompile Include="src\ui\map\SpriteProvider.ts" />
     <TypeScriptCompile Include="src\game.ts" />
     <TypeScriptCompile Include="src\ui\PerfomanceStats.ts" />
     <TypeScriptCompile Include="src\ui\textlog.ts" />

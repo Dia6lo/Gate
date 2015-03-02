@@ -1,6 +1,7 @@
 ﻿import UiContainer = require("./uicontainer");
 import PerfomanceStats = require("./perfomancestats");
-import TextLog = require("./textlog");
+import ServiceProvider = require("../serviceprovider");
+
 class Stage {
 
     width: number;
@@ -17,8 +18,13 @@ class Stage {
         var ui = new UiContainer();
         this.stage.addChild(ui);
         ui.position = new PIXI.Point(this.width / 4);
-        var tl = new TextLog();
-        this.stage.addChild(tl);
+        this.stage.addChild(ServiceProvider.TextLog.container);
+        this.stage.addChild(ServiceProvider.Tooltip.container);
+        this.stage.mousemove = this.onMove.bind(this);
+    }
+
+    onMove(mouseData: PIXI.InteractionData) {
+        ServiceProvider.Tooltip.container.position = mouseData.global;
     }
 
     update() {

@@ -26,6 +26,7 @@ class KeyboardControl {
 
     static newPosition(direction) {
         ServiceProvider.Client.sendMessage("move", direction);
+        ServiceProvider.TextLog.addMessage("pressed " + direction);
     }
 }
 

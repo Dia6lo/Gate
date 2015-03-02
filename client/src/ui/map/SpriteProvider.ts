@@ -1,4 +1,4 @@
-﻿class TilesetProvider {
+﻿class SpriteProvider {
     private static entityToSprite: { [type: string]: PIXI.Sprite } = {};
     private static tileToSprite: { [type: string]: PIXI.Sprite } = {};
     private static assetsFolder = "assets/";
@@ -29,9 +29,9 @@
     }
 
     static initialize() {
-        TilesetProvider.initEntityToSprite();
-        TilesetProvider.initTileToSprite();
+        SpriteProvider.initEntityToSprite();
+        SpriteProvider.initTileToSprite();
     }
 }
 
-export = TilesetProvider;
+export = SpriteProvider;

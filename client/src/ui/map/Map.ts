@@ -1,13 +1,12 @@
-﻿import TilesetProvider = require("./TilesetProvider");
+﻿import Tile = require ("./tile");
 import ServiceProvider = require("../../serviceprovider");
 
-class Map extends PIXI.SpriteBatch {
+class Map extends PIXI.DisplayObjectContainer {
 
     settings;
 
     constructor() {
         super();
-        TilesetProvider.initialize();
         this.settings = {
             tilesX: 11,
             tilesY: 11,
@@ -19,7 +18,7 @@ class Map extends PIXI.SpriteBatch {
     initialize() {
         for (var x = 0; x < this.settings.tilesX; x++) {
             for (var y = 0; y < this.settings.tilesY; y++) {
-                this.addSprite(TilesetProvider.getTile("Undefined"), x, y);
+                this.addTile(new Tile("Undefined"), x, y);
             }
         }
 
@@ -34,19 +33,15 @@ class Map extends PIXI.SpriteBatch {
         for (var x = 0; x < this.settings.tilesX; x++) {
             for (var y = 0; y < this.settings.tilesY; y++) {
                 var tile = map[x][y];
-                this.addSprite(TilesetProvider.getTile(tile.FloorType), x, y);
-                for (var i = 0; i < tile.Entities.length; i++) {
-                    var type = tile.Entities[i].Type;
-                    this.addSprite(TilesetProvider.getEntity(type), x, y);
-                }
+                this.addTile(new Tile(tile.FloorType, tile.Entities), x, y);
             }
         }
     }
 
-    addSprite(sprite: PIXI.Sprite, x: number, y: number) {
-        sprite.position.x = x * this.settings.tileSize;
-        sprite.position.y = y * this.settings.tileSize;
-        this.addChild(sprite);
+    addTile(tile: Tile, x: number, y: number) {
+        tile.position.x = x * this.settings.tileSize;
+        tile.position.y = y * this.settings.tileSize;
+        this.addChild(tile);
     }
 }
 
