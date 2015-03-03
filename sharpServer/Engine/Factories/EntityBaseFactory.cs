@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine.Factories
 {
-    static class EntityBaseFactory
+    internal static class EntityBaseFactory
     {
         public static uint Create(Vector2 position, string description = "No description")
         {

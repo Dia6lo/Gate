@@ -2,33 +2,36 @@
 
 class Key {
 
-    isDown = false;
-    lastDown = 0;
-    delay = 50;
-    onDown = new EventManager();
-    onUp = new EventManager();
+    private isDown = false;
+    private lastDown = 0;
+    private delay = 50;
+
+    private action = new EventManager();
 
     setup(callback: Function, context: Object) {
-        this.onDown.on("down", callback, context);
+        this.action.on("down", callback, context);
+    }
+
+    setDelay(delay: number) {
+        this.delay = delay;
     }
 
     processKeyDown(event: Event) {
-        if (this.isDown) {
-            if (event.timeStamp > this.lastDown + this.delay) {
-                this.onDown.trigger("down");
-                this.lastDown = event.timeStamp;
-            }
-        }
-        else {
+        if (!this.isDown) {
             this.lastDown = event.timeStamp;
             this.isDown = true;
-            this.onDown.trigger("down");
+            this.action.trigger("down");
+            return;
+        }
+        if (event.timeStamp > this.lastDown + this.delay) {
+            this.action.trigger("down");
+            this.lastDown = event.timeStamp;
         }
     }
 
     processKeyUp(event: Event) {
         this.isDown = false;
-        this.onUp.trigger("down");
+        //this.action.trigger("up");
     }
 }
 

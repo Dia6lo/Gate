@@ -2,11 +2,11 @@
 {
     internal class Render : Component
     {
-        public string Sprite;
+        public string Description;
         public bool HaveDescription;
         public string Name;
+        public string Sprite;
         public string Type;
-        public string Description;
 
         public Render(string sprite, bool haveDescription, string name = "", string type = "", string description = "")
         {

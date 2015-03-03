@@ -1,13 +1,11 @@
-﻿*{
-    margin:0;
-    padding:0;
+﻿* {
+    margin: 0;
+    padding: 0;
 }
 
-body{
-	background-color:#fff;
-}
+body { background-color: #fff; }
 
-canvas{
-	display:block;
-    background-color:#fff;
+canvas {
+    background-color: #fff;
+    display: block;
 }

@@ -1,5 +1,5 @@
 ﻿import Tile = require ("./tile");
-import ServiceProvider = require("../../serviceprovider");
+import ServiceProvider = require("../../../serviceprovider");
 
 class Map extends PIXI.DisplayObjectContainer {
 

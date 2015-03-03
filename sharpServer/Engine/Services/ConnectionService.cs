@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 
 namespace SharpServer.Engine.Services
 {
-    class a
+    internal class a
     {
-        
     }
+
     internal static class ConnectionService
     {
         private static readonly Dictionary<int, IWebSocketConnection> PlayersToSockets =
@@ -16,14 +16,14 @@ namespace SharpServer.Engine.Services
 
         private static readonly WebSocketServer Server = new WebSocketServer("ws://127.0.0.1:8080");
 
-        public static void BroadcastToAll(string header, object body)
+        public static void Broadcast(string header, object body)
         {
             var message = CreateMessage(header, body);
             foreach (var player in PlayersToSockets)
                 player.Value.Send(message);
         }
 
-        public static void BroadcastToPlayers(string header, object body, IEnumerable<int> players)
+        public static void Broadcast(string header, object body, IEnumerable<int> players)
         {
             var message = CreateMessage(header, body);
             foreach (var player in players)
@@ -61,7 +61,7 @@ namespace SharpServer.Engine.Services
             switch (header)
             {
                 case "move":
-                    OnPlayerMove((string)unpackedMessage.Body, id);
+                    OnPlayerMove((string) unpackedMessage.Body, id);
                     break;
             }
         }
@@ -90,8 +90,8 @@ namespace SharpServer.Engine.Services
 
         private class Message
         {
-            public readonly string Header;
             public readonly object Body;
+            public readonly string Header;
 
             public Message(string header, object body)
             {

@@ -1,9 +1,9 @@
 ﻿namespace SharpServer.Engine
 {
-    class Health: Component
+    internal class Health : Component
     {
-        public uint MaxHealth;
         public uint CurrentHealth;
+        public uint MaxHealth;
 
         public Health(uint maxHealth)
         {

@@ -1,5 +1,5 @@
 ﻿import SpriteProvider = require("./SpriteProvider");
-import ServiceProvider = require("../../serviceprovider");
+import ServiceProvider = require("../../../serviceprovider");
 
 class Tile extends PIXI.Sprite {
 
@@ -20,7 +20,6 @@ class Tile extends PIXI.Sprite {
             }
         this.interactive = true;
         this.mouseover = this.onOver.bind(this);
-        this.mouseout = this.onOut.bind(this);
     }
 
     onOver(mouseData: PIXI.InteractionData) {
@@ -32,16 +31,8 @@ class Tile extends PIXI.Sprite {
         if (entity.HaveDescription) {
             ServiceProvider.Tooltip.updateText(entity.Name, entity.Type, entity.Description);
             ServiceProvider.Tooltip.container.visible = true;
-        }
-        else
+        } else
             ServiceProvider.Tooltip.container.visible = false;
-    }
-
-    onOut(mouseData: PIXI.InteractionData) {
-        /*if (ServiceProvider.Tooltip.inTile)
-            ServiceProvider.Tooltip.inTile = false;
-        else
-            ServiceProvider.Tooltip.container.visible = false;*/
     }
 }
 

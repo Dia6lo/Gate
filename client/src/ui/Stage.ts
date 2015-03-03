@@ -1,4 +1,4 @@
-﻿import UiContainer = require("./uicontainer");
+﻿import MapContainer = require("./elements/mapcontainer");
 import PerfomanceStats = require("./perfomancestats");
 import ServiceProvider = require("../serviceprovider");
 
@@ -15,7 +15,7 @@ class Stage {
         this.stage = new PIXI.Stage(0x000000);
         this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
         document.body.appendChild(this.renderer.view);
-        var ui = new UiContainer();
+        var ui = new MapContainer();
         this.stage.addChild(ui);
         ui.position = new PIXI.Point(this.width / 4);
         this.stage.addChild(ServiceProvider.TextLog.container);

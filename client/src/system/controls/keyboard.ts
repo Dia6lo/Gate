@@ -1,14 +1,14 @@
-﻿import Key = require("./key");
+﻿import Key = require("./Key");
 
 class Keyboard {
-    keys: {[keycode: number]: Key} = {};
+    private keys: { [keycode: number]: Key } = {};
 
     constructor() {
         window.addEventListener("keydown", this.processKeyDown.bind(this), false);
         window.addEventListener("keyup", this.processKeyUp.bind(this), false);
     }
 
-    setupKey(keycode: number, callback: Function, context: Object) {
+    setKeyAction(keycode: number, callback: Function, context: Object) {
         if (this.keys[keycode] === undefined) {
             this.keys[keycode] = new Key();
         }
@@ -30,3 +30,4 @@ class Keyboard {
 }
 
 export = Keyboard;
+

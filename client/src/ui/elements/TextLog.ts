@@ -1,4 +1,4 @@
-﻿class TextLog{
+﻿class TextLog {
     private static color = "rgba(255, 255, 255, 1)";
     private static fontSize = 12;
     private static margin = 5;
@@ -7,7 +7,7 @@
     private static messages: string[] = [];
     private static instance: PIXI.DisplayObjectContainer = null;
 
-    static get container(): PIXI.DisplayObjectContainer{
+    static get container(): PIXI.DisplayObjectContainer {
         if (this.instance == null) {
             this.instance = new PIXI.DisplayObjectContainer();
             for (var i = 0; i < this.maxMessages; i++) {
@@ -20,7 +20,7 @@
         return this.instance;
     }
 
-    static updateText () {
+    static updateText() {
         var messages = this.messages;
         var instance = this.container;
         for (var i = 0; i < this.maxMessages; i++) {

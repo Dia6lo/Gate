@@ -1,15 +1,21 @@
 ﻿class PerfomanceStats {
 
-    static stats = new Stats();
-    static initialize() {
-        this.stats.setMode(0); // 0: fps, 1: ms
+    //static stats = new Stats();
 
-        // align top-left
-        this.stats.domElement.style.position = "absolute";
-        this.stats.domElement.style.right = "10px";
-        this.stats.domElement.style.top = "10px";
+    private static _stats: Stats = null;
 
-        document.body.appendChild(this.stats.domElement);
+    static get stats() {
+        if (this._stats == null) {
+            this._stats = new Stats();
+            // 0: fps, 1: ms
+            this._stats.setMode(0); 
+            // align top-left
+            this._stats.domElement.style.position = "absolute";
+            this._stats.domElement.style.right = "10px";
+            this._stats.domElement.style.top = "10px";
+            document.body.appendChild(this._stats.domElement);
+        }
+        return this._stats;
     }
 }
 

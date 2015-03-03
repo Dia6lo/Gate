@@ -1,6 +1,4 @@
 ﻿import Stage = require("./stage");
-import PerfomanceStats = require("./perfomancestats");
-import SpriteProvider = require("./map/SpriteProvider");
 
 class UiInitializer {
 
@@ -17,11 +15,9 @@ class UiInitializer {
 
         //Start loading the assets
         //loader.load();
-        PerfomanceStats.initialize();
-        SpriteProvider.initialize();
         this.stage = new Stage();
         this.stage.update();
     }
 }
 
-export = UiInitializer; 
+export = UiInitializer;

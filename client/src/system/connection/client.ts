@@ -8,12 +8,12 @@ interface IMessage {
 }
 
 class Client {
-    private static socket: WebSocket;
+    private static socket: WebSocket = null;
     private static connected = false;
     private static messageHandlers = new EventManager();
 
     static onOpen(evt: any) {
-        Client.connected = true;
+        this.connected = true;
     }
 
     static sendMessage(header: string, body: Object) {
@@ -33,8 +33,8 @@ class Client {
         this.messageHandlers.on(message, callback, context);
     }
 
-    static initialize() {
-        this.socket = new WebSocket("ws://127.0.0.1:8080");
+    static initialize(url: string) {
+        this.socket = new WebSocket(url);
         this.socket.onopen = evt => this.onOpen(evt);
         this.socket.onmessage = evt => this.onMessage(evt);
     }

@@ -8,6 +8,7 @@ namespace SharpServer.Engine.Services
 {
     internal static class PlayerService
     {
+        private const int VisionRange = 5;
         private static int _lowestUnassignedPlayerId = 1;
         private static readonly Dictionary<int, uint> PlayersToEntities = new Dictionary<int, uint>();
 
@@ -18,13 +19,13 @@ namespace SharpServer.Engine.Services
             WorldService.RemoveEntity(player, position.Position);
             EntityManager.DestroyEntity(player);
             PlayersToEntities.Remove(id);
-            BroadcastMapToAll();
+            BroadcastMap();
         }
 
-        private static void BroadcastMapToAll()
+        private static void BroadcastMap()
         {
             foreach (var player in PlayersToEntities)
-                ConnectionService.SendMessage("map", InformationService.GetSurroundings(player.Value, Player.VisionRange),
+                ConnectionService.SendMessage("map", InformationService.GetSurroundings(player.Value, VisionRange),
                     player.Key);
         }
 
@@ -38,7 +39,7 @@ namespace SharpServer.Engine.Services
             }
             var player = PlayerFactory.Create(id, position);
             WorldService.AddEntity(position, player);
-            BroadcastMapToAll();
+            BroadcastMap();
             PlayersToEntities[id] = player;
             return id;
         }
@@ -46,7 +47,7 @@ namespace SharpServer.Engine.Services
         public static void SendSurroundings(int id)
         {
             var player = PlayersToEntities[id];
-            var surroundings = InformationService.GetSurroundings(player, Player.VisionRange);
+            var surroundings = InformationService.GetSurroundings(player, VisionRange);
             ConnectionService.SendMessage("map", surroundings, id);
             //Console.WriteLine(ConnectionService.DebugMessage("map", surroundings));
         }
@@ -61,7 +62,7 @@ namespace SharpServer.Engine.Services
             var destination = position.Combine(offset);
             if (MovementService.MoveEntity(player, destination))
             {
-                BroadcastMapToAll();
+                BroadcastMap();
             }
         }
 
@@ -69,11 +70,11 @@ namespace SharpServer.Engine.Services
         {
             //TODO: Make it synchronous
             {
-                if (_lowestUnassignedPlayerId < int.MaxValue)
+                if (_lowestUnassignedPlayerId < Int32.MaxValue)
                 {
                     return _lowestUnassignedPlayerId++;
                 }
-                for (var i = 1; i < int.MaxValue; i++)
+                for (var i = 1; i < Int32.MaxValue; i++)
                 {
                     if (!PlayersToEntities.ContainsKey(i))
                         return i;

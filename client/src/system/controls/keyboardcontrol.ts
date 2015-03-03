@@ -8,20 +8,20 @@ class KeyboardControl {
         for (var key in controls) {
             if (controls.hasOwnProperty(key)) {
                 switch (key) {
-                    case ("left"):
-                    case ("right"):
-                    case ("up"):
-                    case ("down"):
-                    KeyboardControl.bindKey(key, controls[key]);
+                case ("left"):
+                case ("right"):
+                case ("up"):
+                case ("down"):
+                    this.bindKey(key, controls[key]);
                 }
             }
         }
-        
+
     }
 
-    static bindKey(action: string, keyChar: string){
+    static bindKey(action: string, keyChar: string) {
         var keyCode = keyChar.charCodeAt(0);
-        this.keyboard.setupKey(keyCode, KeyboardControl.newPosition.bind(this, action), this);
+        this.keyboard.setKeyAction(keyCode, this.newPosition.bind(this, action), this);
     }
 
     static newPosition(direction) {

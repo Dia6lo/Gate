@@ -5,6 +5,8 @@ namespace SharpServer.Engine.Services
 {
     internal static class WorldService
     {
+        public const int TilesX = 20;
+        public const int TilesY = 10;
 
         public static void AddEntity(Vector2 position, uint entity)
         {
@@ -61,8 +63,6 @@ namespace SharpServer.Engine.Services
             EntityManager.GetComponent<Tile>(tile).ContainingVolume -= volume;
         }
 
-        public const int TilesX = 20;
-        public const int TilesY = 10;
         public static readonly uint[,] Tiles = new uint[TilesX, TilesY];
     }
 }

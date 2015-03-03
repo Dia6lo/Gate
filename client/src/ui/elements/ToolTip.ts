@@ -1,32 +1,32 @@
-﻿class ToolTip{
+﻿class ToolTip {
     private static background = new PIXI.Graphics();
     private static title = new PIXI.Text(
-            "",
-            {
-                font: "bold 12px Courier New",
-                fill: "#ffffff",
-                wordWrap: true,
-                wordWrapWidth: 150
-            }
-            );
+        "",
+        {
+            font: "bold 12px Courier New",
+            fill: "#ffffff",
+            wordWrap: true,
+            wordWrapWidth: 150
+        }
+    );
     private static type = new PIXI.Text(
-            "",
-            {
-                font: "12px Courier New",
-                fill: "#ffffff",
-                wordWrap: true,
-                wordWrapWidth: 150
-            }
-            );
+        "",
+        {
+            font: "12px Courier New",
+            fill: "#ffffff",
+            wordWrap: true,
+            wordWrapWidth: 150
+        }
+    );
     private static description = new PIXI.Text(
-            "",
-            {
-                font: "12px Courier New",
-                fill: "#b4b4b4",
-                wordWrap: true,
-                wordWrapWidth: 150
-            }
-        );
+        "",
+        {
+            font: "12px Courier New",
+            fill: "#b4b4b4",
+            wordWrap: true,
+            wordWrapWidth: 150
+        }
+    );
     private static instance: PIXI.DisplayObjectContainer = null;
 
     static get container() {
@@ -91,4 +91,3 @@
 }
 
 export = ToolTip;
- 
