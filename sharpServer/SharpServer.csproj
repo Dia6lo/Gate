@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Engine\Components\Component.cs" />
     <Compile Include="Engine\Components\Health.cs" />
+    <Compile Include="Engine\Components\Moving.cs" />
     <Compile Include="Engine\Components\Player.cs" />
     <Compile Include="Engine\Components\Render.cs" />
     <Compile Include="Engine\Components\Shape.cs" />
@@ -63,10 +64,12 @@
     <Compile Include="Engine\Factories\TileFactory.cs" />
     <Compile Include="Engine\Factories\WallFactory.cs" />
     <Compile Include="Engine\Geometry\Vector2.cs" />
+    <Compile Include="Engine\Services\BattleService.cs" />
     <Compile Include="Engine\Services\ConnectionService.cs" />
     <Compile Include="Engine\Services\InformationService.cs" />
     <Compile Include="Engine\Services\MovementService.cs" />
     <Compile Include="Engine\Services\PlayerService.cs" />
+    <Compile Include="Engine\Services\CooldownService.cs" />
     <Compile Include="Engine\Services\WorldService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

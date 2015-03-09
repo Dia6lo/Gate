@@ -1,13 +1,13 @@
-﻿import MapContainer = require("./elements/mapcontainer");
+﻿import Map = require("./elements/map");
 import PerfomanceStats = require("./perfomancestats");
 import ServiceProvider = require("../serviceprovider");
 
 class Stage {
 
-    width: number;
-    height: number;
-    stage: PIXI.Stage;
-    renderer: PIXI.PixiRenderer;
+    private width: number;
+    private height: number;
+    private stage: PIXI.Stage;
+    private renderer: PIXI.PixiRenderer;
 
     constructor() {
         this.width = window.innerWidth;
@@ -15,15 +15,19 @@ class Stage {
         this.stage = new PIXI.Stage(0x000000);
         this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
         document.body.appendChild(this.renderer.view);
-        var ui = new MapContainer();
-        this.stage.addChild(ui);
-        ui.position = new PIXI.Point(this.width / 4);
+        this.initializeMap();
         this.stage.addChild(ServiceProvider.TextLog.container);
         this.stage.addChild(ServiceProvider.Tooltip.container);
         this.stage.mousemove = this.onMove.bind(this);
     }
 
-    onMove(mouseData: PIXI.InteractionData) {
+    private initializeMap() {
+        var map = new Map(2);
+        this.stage.addChild(map);
+        map.position = new PIXI.Point(this.width / 4);
+    }
+
+    private onMove(mouseData: PIXI.InteractionData) {
         ServiceProvider.Tooltip.container.position = mouseData.global;
     }
 

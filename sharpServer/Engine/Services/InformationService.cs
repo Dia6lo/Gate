@@ -21,8 +21,8 @@ namespace SharpServer.Engine.Services
                 (position.Y >= WorldService.TilesY))
                 return new Cell("Void", new Entity[0]);
             var tile = EntityManager.GetComponent<Tile>(WorldService.Tiles[position.X, position.Y]);
-            var entities = Enumerable.ToList(tile.Entities
-                .Select(EntityManager.GetComponent<Render>))
+            var entities = tile.Entities
+                .Select(EntityManager.GetComponent<Render>).ToList()
                 .ConvertAll(
                     render =>
                         new Entity(render.Sprite, render.HaveDescription, render.Name, render.Type, render.Description))

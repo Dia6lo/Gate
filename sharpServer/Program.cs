@@ -1,4 +1,5 @@
-﻿using SharpServer.Engine.Services;
+﻿using System;
+using SharpServer.Engine.Services;
 
 namespace SharpServer
 {
@@ -8,6 +9,7 @@ namespace SharpServer
         {
             WorldService.Initialize();
             ConnectionService.Start();
+            Console.ReadKey();
         }
     }
 }

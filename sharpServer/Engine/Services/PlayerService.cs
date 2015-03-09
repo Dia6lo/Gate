@@ -44,7 +44,7 @@ namespace SharpServer.Engine.Services
             return id;
         }
 
-        public static void SendSurroundings(int id)
+        public static void SendSurroundings(int id, object data)
         {
             var player = PlayersToEntities[id];
             var surroundings = InformationService.GetSurroundings(player, VisionRange);
@@ -52,8 +52,9 @@ namespace SharpServer.Engine.Services
             //Console.WriteLine(ConnectionService.DebugMessage("map", surroundings));
         }
 
-        public static void MovePlayer(int id, string direction)
+        public static void MovePlayer(int id, object data)
         {
+            var direction = (string) data;
             uint player;
             if (!PlayersToEntities.TryGetValue(id, out player))
                 return;

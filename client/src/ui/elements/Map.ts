@@ -1,12 +1,24 @@
-﻿import Tile = require ("./tile");
-import ServiceProvider = require("../../../serviceprovider");
+﻿import Tile = require ("./map/tile");
+import ServiceProvider = require("../../serviceprovider");
 
 class Map extends PIXI.DisplayObjectContainer {
+    private map: Map;
+    private _zoom;
+
+    set zoom(zoom: number) {
+        this.scale = new PIXI.Point(zoom, zoom);
+        this._zoom = zoom;
+    }
+
+    get zoom() {
+        return this._zoom;
+    }
 
     settings;
 
-    constructor() {
+    constructor(zoom: number) {
         super();
+        this.zoom = zoom;
         this.settings = {
             tilesX: 11,
             tilesY: 11,

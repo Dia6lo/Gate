@@ -30,7 +30,7 @@
     <TypeScriptCompile Include="src\system\controls\KeyboardControl.ts" />
     <TypeScriptCompile Include="src\ServiceProvider.ts" />
     <TypeScriptCompile Include="src\system\SystemInitializer.ts" />
-    <TypeScriptCompile Include="src\ui\elements\map\Map.ts" />
+    <TypeScriptCompile Include="src\ui\elements\Map.ts" />
     <TypeScriptCompile Include="src\ui\elements\map\Tile.ts" />
     <TypeScriptCompile Include="src\ui\elements\ToolTip.ts" />
     <TypeScriptCompile Include="src\ui\Stage.ts" />
@@ -38,7 +38,6 @@
     <TypeScriptCompile Include="src\Game.ts" />
     <TypeScriptCompile Include="src\ui\PerfomanceStats.ts" />
     <TypeScriptCompile Include="src\ui\elements\TextLog.ts" />
-    <TypeScriptCompile Include="src\ui\elements\MapContainer.ts" />
     <TypeScriptCompile Include="src\ui\UIInitializer.ts" />
     <TypeScriptCompile Include="src\utility\EventManager.ts" />
     <TypeScriptCompile Include="typings\pixi.d.ts" />

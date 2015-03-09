@@ -5,16 +5,16 @@ using Newtonsoft.Json;
 
 namespace SharpServer.Engine.Services
 {
-    internal class a
-    {
-    }
-
     internal static class ConnectionService
     {
+        public delegate void MessageHandler(int id, object data);
+
         private static readonly Dictionary<int, IWebSocketConnection> PlayersToSockets =
             new Dictionary<int, IWebSocketConnection>();
 
         private static readonly WebSocketServer Server = new WebSocketServer("ws://127.0.0.1:8080");
+
+        private static readonly Dictionary<string, List<MessageHandler>> Handlers = new Dictionary<string, List<MessageHandler>>(); 
 
         public static void Broadcast(string header, object body)
         {
@@ -43,9 +43,9 @@ namespace SharpServer.Engine.Services
 
         public static void Start()
         {
+            InitializeHandlers();
             Server.Start(socket => socket.OnOpen = () => OnPlayerConnect(socket));
             Console.WriteLine("Server started on 8080");
-            Console.ReadKey();
         }
 
         private static string CreateMessage(string header, object body)
@@ -54,23 +54,42 @@ namespace SharpServer.Engine.Services
             return JsonConvert.SerializeObject(message);
         }
 
+        //KOSTYL
+        private static void InitializeHandlers()
+        {
+            Subscribe("move", PlayerService.MovePlayer);
+            Subscribe("request_map", PlayerService.SendSurroundings);
+        }
+
         private static void HandleMessage(string message, int id)
         {
             var unpackedMessage = JsonConvert.DeserializeObject<Message>(message);
-            var header = unpackedMessage.Header;
-            switch (header)
+            List<MessageHandler> handlers;
+            if (!Handlers.TryGetValue(unpackedMessage.Header, out handlers))
             {
-                case "move":
-                    OnPlayerMove((string) unpackedMessage.Body, id);
-                    break;
+                return;
             }
+            foreach (var handler in handlers)
+            {
+                handler(id, unpackedMessage.Body);
+            }
+        }
+
+        public static void Subscribe(string message, MessageHandler handler)
+        {
+            List<MessageHandler> handlers;
+            if (!Handlers.TryGetValue(message, out handlers))
+            {
+                handlers = new List<MessageHandler>();
+                Handlers[message] = handlers;
+            }
+            handlers.Add(handler);
         }
 
         private static void OnPlayerConnect(IWebSocketConnection socket)
         {
             var id = PlayerService.InitializePlayer();
             PlayersToSockets[id] = socket;
-            PlayerService.SendSurroundings(id);
             Console.WriteLine("connected player " + id);
             socket.OnClose = () => OnPlayerDisconnect(id);
             socket.OnMessage = message => HandleMessage(message, id);
@@ -81,11 +100,6 @@ namespace SharpServer.Engine.Services
             PlayerService.DestroyPlayer(id);
             PlayersToSockets.Remove(id);
             Console.WriteLine("disconnected player " + id);
-        }
-
-        private static void OnPlayerMove(string direction, int playerId)
-        {
-            PlayerService.MovePlayer(playerId, direction);
         }
 
         private class Message

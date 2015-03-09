@@ -14,6 +14,7 @@ class Client {
 
     static onOpen(evt: any) {
         this.connected = true;
+        this.sendMessage("request_map", null);
     }
 
     static sendMessage(header: string, body: Object) {
