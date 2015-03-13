@@ -1,7 +1,7 @@
 ﻿namespace SharpServer.Engine
-{   
+{
     //TODO: Make a better name for this comp
-    class Moving: Component
+    public class Moving : Component
     {
         public int Speed;
 

@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine
 {
-    internal class Health : Component
+    public class Health : Component
     {
         public uint CurrentHealth;
         public uint MaxHealth;

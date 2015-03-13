@@ -2,7 +2,7 @@
 
 namespace SharpServer.Engine
 {
-    internal class Vector2
+    public class Vector2
     {
         public int X;
         public int Y;

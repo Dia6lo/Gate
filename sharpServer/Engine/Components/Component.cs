@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine
 {
-    internal abstract class Component
+    public abstract class Component
     {
     }
 }

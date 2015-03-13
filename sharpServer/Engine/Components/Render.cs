@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine
 {
-    internal class Render : Component
+    public class Render : Component
     {
         public string Description;
         public bool HaveDescription;

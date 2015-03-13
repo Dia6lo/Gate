@@ -2,16 +2,13 @@
 
 namespace SharpServer.Engine
 {
-    internal class Tile : Component
+    public class Tile : Component
     {
-        public static int MaxVolume = 100;
-        public int ContainingVolume;
-        public List<uint> Entities = new List<uint>();
-        public string FloorType;
+        public int FloorType;
 
         public Tile(string floorType)
         {
-            FloorType = floorType;
+            FloorType = Services.FlyweightComponentDB.Tile.GetCode(floorType);
         }
     }
 }

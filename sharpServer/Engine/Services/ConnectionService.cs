@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace SharpServer.Engine.Services
 {
-    internal static class ConnectionService
+    public static class ConnectionService
     {
         public delegate void MessageHandler(int id, object data);
 
@@ -14,7 +14,8 @@ namespace SharpServer.Engine.Services
 
         private static readonly WebSocketServer Server = new WebSocketServer("ws://127.0.0.1:8080");
 
-        private static readonly Dictionary<string, List<MessageHandler>> Handlers = new Dictionary<string, List<MessageHandler>>(); 
+        private static readonly Dictionary<string, List<MessageHandler>> Handlers =
+            new Dictionary<string, List<MessageHandler>>();
 
         public static void Broadcast(string header, object body)
         {

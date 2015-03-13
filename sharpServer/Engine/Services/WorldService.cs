@@ -3,17 +3,17 @@ using SharpServer.Engine.Factories;
 
 namespace SharpServer.Engine.Services
 {
-    internal static class WorldService
+    public static class WorldService
     {
-        public const int TilesX = 20;
-        public const int TilesY = 10;
+        public const int TilesX = 1000;
+        public const int TilesY = 1000;
 
         public static void AddEntity(Vector2 position, uint entity)
         {
-            var tile = EntityManager.GetComponent<Tile>(Tiles[position.X, position.Y]);
+            var container = EntityManager.GetComponent<Container>(Tiles[position.X, position.Y]);
             var volume = EntityManager.GetComponent<Shape>(entity).Volume;
-            tile.Entities.Add(entity);
-            tile.ContainingVolume += volume;
+            container.Entities.Add(entity);
+            container.ContainingVolume += volume;
         }
 
         public static Vector2 GetFreeTile()
@@ -24,7 +24,7 @@ namespace SharpServer.Engine.Services
             {
                 x = rand.Next(1, 19);
                 y = rand.Next(1, 9);
-            } while (EntityManager.GetComponent<Tile>(Tiles[x, y]).ContainingVolume > 50);
+            } while (EntityManager.GetComponent<Container>(Tiles[x, y]).ContainingVolume > 50);
             return new Vector2(x, y);
         }
 
@@ -54,13 +54,13 @@ namespace SharpServer.Engine.Services
         {
             //var position = Positions[entity];
             var tile = Tiles[position.X, position.Y];
-            var entities = EntityManager.GetComponent<Tile>(tile).Entities;
+            var entities = EntityManager.GetComponent<Container>(tile).Entities;
             if (!entities.Contains(entity))
                 throw new MissingMemberException("REMOVE ERROR: there is no entity " + EntityManager.NameFor(entity) +
                                                  "(ID: " + entity + ") in tile " + position.X + ":" + position.Y);
             entities.Remove(entity);
             var volume = EntityManager.GetComponent<Shape>(entity).Volume;
-            EntityManager.GetComponent<Tile>(tile).ContainingVolume -= volume;
+            EntityManager.GetComponent<Container>(tile).ContainingVolume -= volume;
         }
 
         public static readonly uint[,] Tiles = new uint[TilesX, TilesY];

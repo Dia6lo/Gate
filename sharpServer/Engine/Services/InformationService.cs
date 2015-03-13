@@ -2,7 +2,7 @@
 
 namespace SharpServer.Engine.Services
 {
-    internal static class InformationService
+    public static class InformationService
     {
         public static Cell[,] GetSurroundings(uint entity, int radius)
         {
@@ -21,13 +21,15 @@ namespace SharpServer.Engine.Services
                 (position.Y >= WorldService.TilesY))
                 return new Cell("Void", new Entity[0]);
             var tile = EntityManager.GetComponent<Tile>(WorldService.Tiles[position.X, position.Y]);
-            var entities = tile.Entities
-                .Select(EntityManager.GetComponent<Render>).ToList()
+            var container = EntityManager.GetComponent<Container>(WorldService.Tiles[position.X, position.Y]);
+            var entities = Enumerable.ToList(container.Entities
+                .Select(EntityManager.GetComponent<Render>))
                 .ConvertAll(
                     render =>
                         new Entity(render.Sprite, render.HaveDescription, render.Name, render.Type, render.Description))
                 .ToArray();
-            return new Cell(tile.FloorType, entities);
+            var floorType = FlyweightComponentDB.Tile.GetName(tile.FloorType);
+            return new Cell(floorType, entities);
         }
 
         public struct Entity

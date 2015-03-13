@@ -1,6 +1,6 @@
 ﻿namespace SharpServer.Engine
 {
-    internal class Player : Component
+    public class Player : Component
     {
         public string Name;
 

@@ -8,7 +8,7 @@ namespace SharpServer.Engine
 
     // SUGGESTION: Transform it to service?
     // TODO: make it use data from DB
-    internal static class EntityManager
+    public static class EntityManager
     {
         private static readonly Dictionary<string, ComponentStore> ComponentDb =
             new Dictionary<string, ComponentStore>();

@@ -3,12 +3,12 @@
 namespace SharpServer.Engine.Services
 {
     using BatlleNode = Dictionary<int, int[]>;
-    static class BattleService
+
+    public static class BattleService
     {
+        private static List<BatlleNode> _nodes = new List<BatlleNode>();
 
-        static private List<BatlleNode> _nodes = new List<BatlleNode>();
-
-        static void CreateNode(int entity1, int entity2)
+        private static void CreateNode(int entity1, int entity2)
         {
         }
     }

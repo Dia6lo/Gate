@@ -6,7 +6,7 @@ using SharpServer.Engine.Factories;
 
 namespace SharpServer.Engine.Services
 {
-    internal static class PlayerService
+    public static class PlayerService
     {
         private const int VisionRange = 5;
         private static int _lowestUnassignedPlayerId = 1;

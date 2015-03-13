@@ -2,7 +2,7 @@
 
 namespace SharpServer.Engine
 {
-    internal class EventManager
+    public class EventManager
     {
         public delegate void Handler();
 

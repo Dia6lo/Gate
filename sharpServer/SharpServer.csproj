@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\Components\Component.cs" />
+    <Compile Include="Engine\Components\Container.cs" />
     <Compile Include="Engine\Components\Health.cs" />
     <Compile Include="Engine\Components\Moving.cs" />
     <Compile Include="Engine\Components\Player.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Engine\Geometry\Vector2.cs" />
     <Compile Include="Engine\Services\BattleService.cs" />
     <Compile Include="Engine\Services\ConnectionService.cs" />
+    <Compile Include="Engine\Services\FlyweightComponentDB\Tile.cs" />
     <Compile Include="Engine\Services\InformationService.cs" />
     <Compile Include="Engine\Services\MovementService.cs" />
     <Compile Include="Engine\Services\PlayerService.cs" />
