@@ -95,12 +95,15 @@ namespace SharpServer.Engine
         {
             ComponentStore store;
             if (!ComponentDb.TryGetValue(typeof (T).Name, out store))
-                throw new KeyNotFoundException("GET FAIL: there are no entities with a Component of class: " +
+                throw new Exception("GET FAIL: there are no entities with a Component of class: " +
                                                typeof (T).Name);
             if (!store.ContainsKey(entity))
-                throw new KeyNotFoundException("GET FAIL: " + NameFor(entity) + "(ID: " + entity +
+                throw new Exception("GET FAIL: " + NameFor(entity) + "(ID: " + entity +
                                                ") does not possess Component: " + typeof (T).Name);
-            return (T) store[entity];
+            var component = store[entity] as T;
+            if (component == null)
+                throw new Exception("Cannot get component " + typeof(T).Name);
+            return component;
         }
 
         public static bool HasComponent<T>(int entity) where T : Component
@@ -143,7 +146,7 @@ namespace SharpServer.Engine
                 if (!EntityStore.Contains(i))
                     return i;
             }
-            throw new ArgumentOutOfRangeException("ERROR: no available Entity IDs; too many entities!");
+            throw new Exception("ERROR: no available Entity IDs; too many entities!");
         }
     }
 }
