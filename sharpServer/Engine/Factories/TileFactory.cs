@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace SharpServer.Engine.Factories
+﻿namespace SharpServer.Engine.Factories
 {
     public static class TileFactory
     {

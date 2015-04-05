@@ -9,7 +9,7 @@ namespace SharpServer.Engine.Services
     public static class PlayerService
     {
         private const int VisionRange = 5;
-        private static int _lowestUnassignedPlayerId = 1;
+        private static int lowestUnassignedPlayerId = 1;
         private static readonly Dictionary<int, uint> PlayersToEntities = new Dictionary<int, uint>();
 
         public static void DestroyPlayer(int id)
@@ -71,9 +71,9 @@ namespace SharpServer.Engine.Services
         {
             //TODO: Make it synchronous
             {
-                if (_lowestUnassignedPlayerId < Int32.MaxValue)
+                if (lowestUnassignedPlayerId < Int32.MaxValue)
                 {
-                    return _lowestUnassignedPlayerId++;
+                    return lowestUnassignedPlayerId++;
                 }
                 for (var i = 1; i < Int32.MaxValue; i++)
                 {

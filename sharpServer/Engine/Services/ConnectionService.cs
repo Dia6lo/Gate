@@ -17,14 +17,14 @@ namespace SharpServer.Engine.Services
         private static readonly Dictionary<string, List<MessageHandler>> Handlers =
             new Dictionary<string, List<MessageHandler>>();
 
-        public static void Broadcast(string header, object body)
+        public static void BroadCast(string header, object body)
         {
             var message = CreateMessage(header, body);
             foreach (var player in PlayersToSockets)
                 player.Value.Send(message);
         }
 
-        public static void Broadcast(string header, object body, IEnumerable<int> players)
+        public static void MultiCast(string header, object body, IEnumerable<int> players)
         {
             var message = CreateMessage(header, body);
             foreach (var player in players)
@@ -64,7 +64,9 @@ namespace SharpServer.Engine.Services
 
         private static void HandleMessage(string message, int id)
         {
-            var unpackedMessage = JsonConvert.DeserializeObject<Message>(message);
+            var unpackedMessage = JsonConvert.DeserializeObject(message) as Message;
+            if (unpackedMessage == null)
+                return;
             List<MessageHandler> handlers;
             if (!Handlers.TryGetValue(unpackedMessage.Header, out handlers))
             {

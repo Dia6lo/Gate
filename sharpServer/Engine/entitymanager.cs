@@ -15,15 +15,15 @@ namespace SharpServer.Engine
 
         private static readonly Dictionary<uint, string> EntityHumanReadableNames = new Dictionary<uint, string>();
         private static readonly List<uint> EntityStore = new List<uint>();
-        private static uint _lowestUnassignedEntityId = 1;
+        private static uint lowestUnassignedEntityId = 1;
 
         public static void AddComponent<T>(uint entity, T component) where T : Component
         {
             ComponentStore store;
-            if (!ComponentDb.TryGetValue(typeof (T).Name, out store))
+            if (!ComponentDb.TryGetValue(GetTypeName<T>(), out store))
             {
                 store = new ComponentStore();
-                ComponentDb[typeof (T).Name] = store;
+                ComponentDb[GetTypeName<T>()] = store;
             }
             store[entity] = component;
         }
@@ -64,7 +64,7 @@ namespace SharpServer.Engine
 
         public static T[] GetAllComponentsOfType<T>() where T : Component
         {
-            return ComponentDb[typeof (T).Name]
+            return ComponentDb[GetTypeName<T>()]
                 .Values
                 .Cast<T>()
                 .ToArray();
@@ -82,7 +82,7 @@ namespace SharpServer.Engine
 
         public static uint[] GetAllEntitiesPossessingComponent<T>() where T : Component
         {
-            return ComponentDb[typeof (T).Name]
+            return ComponentDb[GetTypeName<T>()]
                 .Keys
                 .ToArray();
         }
@@ -90,19 +90,36 @@ namespace SharpServer.Engine
         public static T GetComponent<T>(uint entity) where T : Component
         {
             ComponentStore store;
-            if (!ComponentDb.TryGetValue(typeof (T).Name, out store))
+            if (!ComponentDb.TryGetValue(GetTypeName<T>(), out store))
                 throw new KeyNotFoundException("GET FAIL: there are no entities with a Component of class: " +
-                                               typeof (T).Name);
+                                               GetTypeName<T>());
             if (!store.ContainsKey(entity))
                 throw new KeyNotFoundException("GET FAIL: " + NameFor(entity) + "(ID: " + entity +
-                                               ") does not possess Component: " + typeof (T).Name);
-            return (T) store[entity];
+                                               ") does not possess Component: " + GetTypeName<T>());
+            return store[entity] as T;
+        }
+
+        private static string GetTypeName<T>() where T : Component
+        {
+            return typeof (T).Name;
+        }
+
+        public static bool TryGetComponent<T>(uint entity, out T component) where T : Component
+        {
+            ComponentStore store;
+            component = null;
+            if (!ComponentDb.TryGetValue(GetTypeName<T>(), out store))
+                return false;
+            if (!store.ContainsKey(entity))
+                return false;
+            component = store[entity] as T;
+            return true;
         }
 
         public static bool HasComponent<T>(uint entity) where T : Component
         {
             ComponentStore store;
-            return ComponentDb.TryGetValue(typeof (T).Name, out store) && store.ContainsKey(entity);
+            return ComponentDb.TryGetValue(GetTypeName<T>(), out store) && store.ContainsKey(entity);
         }
 
         public static string NameFor(uint entity)
@@ -113,7 +130,7 @@ namespace SharpServer.Engine
         public static void RemoveComponent<T>(uint entity) where T : Component
         {
             ComponentStore store;
-            if (ComponentDb.TryGetValue(typeof (T).Name, out store))
+            if (ComponentDb.TryGetValue(GetTypeName<T>(), out store))
                 store.Remove(entity);
         }
 
@@ -126,9 +143,9 @@ namespace SharpServer.Engine
         // TODO: Make it synchronous
         private static uint GenerateNewEntityId()
         {
-            if (_lowestUnassignedEntityId < int.MaxValue)
+            if (lowestUnassignedEntityId < int.MaxValue)
             {
-                return _lowestUnassignedEntityId++;
+                return lowestUnassignedEntityId++;
             }
             for (uint i = 1; i < int.MaxValue; i++)
             {

@@ -22,13 +22,14 @@ namespace SharpServer.Engine.Services
                 return new Cell("Void", new Entity[0]);
             var tile = EntityManager.GetComponent<Tile>(WorldService.Tiles[position.X, position.Y]);
             var container = EntityManager.GetComponent<Container>(WorldService.Tiles[position.X, position.Y]);
-            var entities = Enumerable.ToList(container.Entities
-                .Select(EntityManager.GetComponent<Render>))
+            var entities = container.Contents
+                .Select(EntityManager.GetComponent<Render>)
+                .ToList()
                 .ConvertAll(
                     render =>
                         new Entity(render.Sprite, render.HaveDescription, render.Name, render.Type, render.Description))
                 .ToArray();
-            var floorType = FlyweightComponentDB.Tile.GetName(tile.FloorType);
+            var floorType = Tile.GetName(tile.FloorType);
             return new Cell(floorType, entities);
         }
 
