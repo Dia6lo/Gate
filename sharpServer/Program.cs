@@ -3,7 +3,7 @@ using SharpServer.Engine.Services;
 
 namespace SharpServer
 {
-    class Program
+    static class Program
     {
         private static void Main(string[] args)
         {

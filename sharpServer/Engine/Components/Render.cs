@@ -8,7 +8,7 @@
         public string Sprite;
         public string Type;
 
-        public Render(string sprite, bool haveDescription, string name = "", string type = "", string description = "")
+        public Render(string sprite, bool haveDescription = false, string name = "", string type = "", string description = "")
         {
             Sprite = sprite;
             HaveDescription = haveDescription;

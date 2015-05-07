@@ -17,8 +17,8 @@ namespace SharpServer.Engine.Services
 
         private static Cell MakeCell(Vector2 position)
         {
-            if ((position.X < 0) || (position.Y < 0) || (position.X >= WorldService.TilesX) ||
-                (position.Y >= WorldService.TilesY))
+            if ((position.X < 0) || (position.Y < 0) || (position.X >= WorldService.Width) ||
+                (position.Y >= WorldService.Height))
                 return new Cell("Void", new Entity[0]);
             var tile = EntityManager.GetComponent<Tile>(WorldService.Tiles[position.X, position.Y]);
             var container = EntityManager.GetComponent<Container>(WorldService.Tiles[position.X, position.Y]);

@@ -5,34 +5,34 @@ namespace SharpServer.Engine.Services
 {
     public static class WorldService
     {
-        public const int TilesX = 1000;
-        public const int TilesY = 1000;
+        public const int Width = 20;
+        public const int Height = 10;
 
         public static void AddEntity(Vector2 position, uint entity)
         {
             EntityManager.GetComponent<Container>(Tiles[position.X, position.Y]).Add(entity);
         }
 
-        public static Vector2 GetFreeTile()
+        public static Vector2 GetFreeTile(int neededVolume)
         {
             var rand = new Random();
             int x, y;
             do
             {
-                x = rand.Next(1, 19);
-                y = rand.Next(1, 9);
-            } while (EntityManager.GetComponent<Container>(Tiles[x, y]).ContainingVolume > 50);
+                x = rand.Next(0, Width);
+                y = rand.Next(0, Height);
+            } while (EntityManager.GetComponent<Container>(Tiles[x, y]).ContainingVolume > neededVolume);
             return new Vector2(x, y);
         }
 
         public static void Initialize()
         {
-            for (var x = 0; x < TilesX; x++)
+            for (var x = 0; x < Width; x++)
             {
-                for (var y = 0; y < TilesY; y++)
+                for (var y = 0; y < Height; y++)
                 {
                     Tiles[x, y] = TileFactory.Create(new Vector2(x, y));
-                    if ((y != 0) && (y != TilesY - 1) && (x != 0) && (x != TilesX - 1)) continue;
+                    if ((y != 0) && (y != Height - 1) && (x != 0) && (x != Width - 1)) continue;
                     var wall = WallFactory.Create(new Vector2(x, y));
                     AddEntity(new Vector2(x, y), wall);
                 }
@@ -53,6 +53,6 @@ namespace SharpServer.Engine.Services
                                                  "(ID: " + entity + ") in tile " + position.X + ":" + position.Y);
         }
 
-        public static readonly uint[,] Tiles = new uint[TilesX, TilesY];
+        public static readonly uint[,] Tiles = new uint[Width, Height];
     }
 }

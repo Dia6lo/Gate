@@ -31,7 +31,7 @@ namespace SharpServer.Engine.Services
 
         public static int InitializePlayer()
         {
-            var position = WorldService.GetFreeTile();
+            var position = WorldService.GetFreeTile(75);
             var id = GenerateNewPlayerId();
             if (id < 1)
             {
