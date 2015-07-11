@@ -10,8 +10,8 @@ namespace SharpServer.Engine
     // TODO: make it use data from DB
     public static class EntityManager
     {
-        private static readonly Dictionary<string, ComponentStore> ComponentDb =
-            new Dictionary<string, ComponentStore>();
+        private static readonly Dictionary<Type, ComponentStore> ComponentDb =
+            new Dictionary<Type, ComponentStore>();
 
         private static readonly Dictionary<uint, string> EntityHumanReadableNames = new Dictionary<uint, string>();
         private static readonly List<uint> EntityStore = new List<uint>();
@@ -50,7 +50,7 @@ namespace SharpServer.Engine
                 DestroyEntity(entity);
         }
 
-        // TODO: Make it synchronous
+        // TODO: Make it thread-safe
         public static void DestroyEntity(uint entity)
         {
             if (!EntityStore.Contains(entity))
@@ -80,7 +80,7 @@ namespace SharpServer.Engine
                 .ToArray();
         }
 
-        public static uint[] GetAllEntitiesPossessingComponent<T>() where T : Component
+        public static uint[] GetAllEntitiesWithComponent<T>() where T : Component
         {
             return ComponentDb[GetTypeName<T>()]
                 .Keys
@@ -99,9 +99,9 @@ namespace SharpServer.Engine
             return store[entity] as T;
         }
 
-        private static string GetTypeName<T>() where T : Component
+        private static Type GetTypeName<T>() where T : Component
         {
-            return typeof (T).Name;
+            return typeof (T);
         }
 
         public static bool TryGetComponent<T>(uint entity, out T component) where T : Component
@@ -140,7 +140,7 @@ namespace SharpServer.Engine
         }
 
         // SUGGESTION: Think about better implementation
-        // TODO: Make it synchronous
+        // TODO: Make it thread-safe
         private static uint GenerateNewEntityId()
         {
             if (lowestUnassignedEntityId < int.MaxValue)
